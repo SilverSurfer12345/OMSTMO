@@ -165,21 +165,21 @@
     <Compile Include="frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMain.cs">
+    <Compile Include="MainClass\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
+    <Compile Include="MainClass\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="helpers\OrderNotificationConfig.cs" />
     <Compile Include="InvoicePopupForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainClass.cs" />
-    <Compile Include="MainClassBase.cs" />
-    <Compile Include="MainClassBase1.cs" />
-    <Compile Include="MainClassHelpers.cs" />
-    <Compile Include="Model\DeliveryChargeManager.cs" />
+    <Compile Include="MainClass\MainClass.cs" />
+    <Compile Include="MainClass\MainClassBase.cs" />
+    <Compile Include="MainClass\MainClassBase1.cs" />
+    <Compile Include="MainClass\MainClassHelpers.cs" />
+    <Compile Include="config\DeliveryChargeManager.cs" />
     <Compile Include="Model\frmAddFoodItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -210,7 +210,6 @@
     <Compile Include="Model\frmStaffAdd.Designer.cs">
       <DependentUpon>frmStaffAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\PostcodeDistanceCalculator.cs" />
     <Compile Include="Model\ucProduct.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -318,7 +317,7 @@
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
+    <EmbeddedResource Include="MainClass\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
