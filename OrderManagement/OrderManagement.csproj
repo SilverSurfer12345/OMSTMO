@@ -210,6 +210,7 @@
     <Compile Include="Model\frmStaffAdd.Designer.cs">
       <DependentUpon>frmStaffAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="config\OrderManager.cs" />
     <Compile Include="Model\ucProduct.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -398,7 +399,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="README.md" />
     <None Include="RMDataSet.xsc">
       <DependentUpon>RMDataSet.xsd</DependentUpon>
     </None>
@@ -587,8 +587,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\-p\" />
-    <Folder Include="Model\LATEST\OMS2\OMS2\OrderManagement\Model\temp\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
