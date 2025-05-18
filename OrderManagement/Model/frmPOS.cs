@@ -510,6 +510,8 @@ namespace OrderManagement.Model
             lstSearchResult.HorizontalScrollbar = false; // Optional
             lstSearchResult.IntegralHeight = false; // Avoids clipping on resizing
             lstSearchResult.Height = 150; // Adjust as needed
+            DeliveryChargeManager.Initialize(this);
+
         }
 
         private void SetupOrderTypeButtons()
@@ -3767,46 +3769,10 @@ private void categoryList_SelectedIndexChanged(object sender, EventArgs e, strin
 
         }
 
-        private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Show the delivery charges management form
-                using (View.frmDeliveryCharges deliveryChargesForm = new View.frmDeliveryCharges())
-                {
-                    deliveryChargesForm.ShowDialog();
-
-                    // After the form is closed, recalculate the delivery charge if in delivery mode
-                    if (currentOrderType == "DELIVERY")
-                    {
-                        string postcode = "";
-                        if (!string.IsNullOrEmpty(customerPostcode))
-                        {
-                            postcode = customerPostcode;
-                        }
-                        else if (!string.IsNullOrEmpty(lblAddressDisplay.Text))
-                        {
-                            string[] parts = lblAddressDisplay.Text.Split(',');
-                            if (parts.Length > 0)
-                            {
-                                postcode = parts[parts.Length - 1].Trim();
-                            }
-                        }
-
-                        // Calculate delivery charge
-                        decimal charge = CalculateDeliveryCharge(postcode);
-
-                        // Update the delivery charge textbox
-                        txtDeliveryCharge.Text = $"£{charge:0.00}";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error managing delivery charges: " + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
+{
+    DeliveryChargeManager.ManageDeliveryCharges(this);
+}
 
 
 

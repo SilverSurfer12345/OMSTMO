@@ -180,6 +180,7 @@
     <Compile Include="MainClassBase1.cs" />
     <Compile Include="MainClassHelpers.cs" />
     <Compile Include="Model\btnDeliveryChargeAmend_Click.cs" />
+    <Compile Include="Model\DeliveryChargeManager.cs" />
     <Compile Include="Model\frmAddFoodItem.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -591,6 +592,7 @@
   <ItemGroup>
     <Folder Include="Model\-p\" />
     <Folder Include="Model\LATEST\OMS2\OMS2\OrderManagement\Model\temp\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
