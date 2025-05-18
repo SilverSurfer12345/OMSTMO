@@ -179,7 +179,6 @@
     <Compile Include="MainClassBase.cs" />
     <Compile Include="MainClassBase1.cs" />
     <Compile Include="MainClassHelpers.cs" />
-    <Compile Include="Model\btnDeliveryChargeAmend_Click.cs" />
     <Compile Include="Model\DeliveryChargeManager.cs" />
     <Compile Include="Model\frmAddFoodItem.cs">
       <SubType>Form</SubType>
@@ -211,7 +210,6 @@
     <Compile Include="Model\frmStaffAdd.Designer.cs">
       <DependentUpon>frmStaffAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\MinimalDeliveryCharge.cs" />
     <Compile Include="Model\PostcodeDistanceCalculator.cs" />
     <Compile Include="Model\ucProduct.cs">
       <SubType>UserControl</SubType>
