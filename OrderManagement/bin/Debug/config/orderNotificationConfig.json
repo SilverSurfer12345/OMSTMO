@@ -1,0 +1,11 @@
+{
+  "Enabled": "Yes",
+  "CollectionOrder": {
+    "HighAlertMinutes": 25,
+    "MediumAlertMinutes": 15
+  },
+  "DeliveryOrder": {
+    "HighAlertMinutes": 60,
+    "MediumAlertMinutes": 45
+  }
+}

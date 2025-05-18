@@ -1,0 +1,5 @@
+{
+    "FSharp.suggestGitignore": false,
+    "dotnet.preferCSharpExtension": true,
+    "amazonQ.telemetry": false
+}

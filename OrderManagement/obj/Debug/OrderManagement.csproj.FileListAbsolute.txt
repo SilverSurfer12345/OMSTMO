@@ -1,0 +1,280 @@
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 Delivery Charge fix and local db\OMS2 LATEST\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 database fix\OMS2\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\RM.mdf
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\RM_log.ldf
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\config\orderNotificationConfig.json
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe.config
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Buffers.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.IO.Packaging.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Memory.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.AssemblyReference.cache
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmHome.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmLogin.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.frmMain.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmAddFoodItem.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCustomerAdd.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmCategoryAdd.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmPOS.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.frmStaffAdd.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Model.ucProduct.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.Properties.Resources.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleAdd.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.SampleView.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCallerView.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCategoryView.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmCustomerView.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmDeliveryCharges.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderHistory.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmOrderProgress.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPayment.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmPreviousOrders.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.frmStaffView.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.View.OrderViewForm.resources
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.GenerateResource.cache
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.csproj.CoreCompileInputs.cache
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderMan.0917E44C.Up2Date
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.pdb
+C:\Users\Nu\Desktop\OMS2 Picture Buttons\OMS2\OMS2\OrderManagement\obj\Debug\OrderManagement.exe.config
