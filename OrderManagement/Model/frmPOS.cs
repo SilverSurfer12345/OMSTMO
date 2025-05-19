@@ -3535,15 +3535,18 @@ namespace OrderManagement.Model
                 OI.ItemName, 
                 MAX(OI.ItemPrice) AS ItemPrice, 
                 COUNT(*) AS OrderCount,
-                MAX(O.OrderDate) AS LastOrdered
+                MAX(O.OrderDate) AS LastOrdered,
+                F.icon AS ItemImage
             FROM 
                 OrderItems OI
             JOIN 
                 Orders O ON OI.OrderId = O.OrderId
+            LEFT JOIN
+                foodItems F ON OI.ItemName = F.Item
             WHERE 
                 O.CustomerId = @CustomerId
             GROUP BY 
-                OI.ItemName
+                OI.ItemName, F.icon
             ORDER BY 
                 COUNT(*) DESC, 
                 MAX(O.OrderDate) DESC";
@@ -3557,30 +3560,27 @@ namespace OrderManagement.Model
 
                 if (previousItems != null && previousItems.Rows.Count > 0)
                 {
-                    // Calculate how many buttons can fit in a row
-                    int buttonWidth = 90; // Width of each button
-                    int buttonMargin = 3; // Margin on each side
-                    int totalButtonWidth = buttonWidth + (buttonMargin * 2); // Total width including margins
-                    int availableWidth = flpPreviousOrders.Width - 30; // Width of the panel minus scrollbar
-                    int buttonsPerRow = Math.Max(1, availableWidth / totalButtonWidth);
-
-                    // Calculate the actual spacing between buttons to distribute them evenly
-                    int totalButtonsWidth = buttonsPerRow * totalButtonWidth;
-                    int extraSpace = availableWidth - totalButtonsWidth;
-                    int extraMargin = extraSpace / (buttonsPerRow + 1); // +1 for the space at the beginning
-
-                    // Create a TableLayoutPanel for evenly distributed buttons
+                    // Create a table layout panel for buttons
                     TableLayoutPanel tablePanel = new TableLayoutPanel
                     {
-                        RowCount = (int)Math.Ceiling((double)previousItems.Rows.Count / buttonsPerRow),
-                        ColumnCount = buttonsPerRow,
-                        Width = flpPreviousOrders.Width - 30,
                         AutoSize = true,
-                        CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
-                        Dock = DockStyle.Top
+                        Dock = DockStyle.Top,
+                        Margin = new Padding(5),
+                        CellBorderStyle = TableLayoutPanelCellBorderStyle.Single
                     };
 
-                    // Set column widths to be equal
+                    // Calculate how many buttons to show per row based on the panel width
+                    int buttonWidth = 112; // Width of a button
+                    int buttonMargin = 10; // Total left/right margin of a button
+                    int totalButtonWidth = buttonWidth + buttonMargin;
+                    int availableWidth = flpPreviousOrders.Width - 30; // Account for scrollbar
+                    int buttonsPerRow = Math.Max(1, availableWidth / totalButtonWidth);
+
+                    // Set up the table layout
+                    tablePanel.ColumnCount = buttonsPerRow;
+                    tablePanel.RowCount = (int)Math.Ceiling((double)previousItems.Rows.Count / buttonsPerRow);
+
+                    // Set column and row styles
                     float columnWidth = 100f / buttonsPerRow;
                     for (int i = 0; i < buttonsPerRow; i++)
                     {
@@ -3598,24 +3598,19 @@ namespace OrderManagement.Model
                         int orderCount = Convert.ToInt32(row["OrderCount"]);
                         DateTime lastOrdered = Convert.ToDateTime(row["LastOrdered"]);
 
-                        // Create a button for each item
-                        Button btn = new Button
+                        // Get image data if available
+                        byte[] imageData = null;
+                        if (row["ItemImage"] != DBNull.Value)
                         {
-                            Text = $"{itemName}\n£{itemPrice:F2}",
-                            Tag = new { ItemName = itemName, ItemPrice = itemPrice },
-                            BackColor = Color.FromArgb(241, 85, 126),
-                            ForeColor = Color.FromArgb(50, 55, 89),
-                            Font = new Font("Segoe UI Black", 10F, FontStyle.Bold),
-                            Size = new Size(112, 88),
-                            UseVisualStyleBackColor = false
-                        };
+                            imageData = (byte[])row["ItemImage"];
+                        }
 
-                        // Attach a click event to add item to basket
-                        btn.Click += (s, e) =>
+                        // Create a button for each item using the CreateFoodItemButton method
+                        Button btn = CreateFoodItemButton(itemName, itemPrice, imageData, (s, e) =>
                         {
                             dynamic tag = ((Button)s).Tag;
                             AddItemToBasket(tag.ItemName, tag.ItemPrice);
-                        };
+                        });
 
                         // Add the button to the table
                         tablePanel.Controls.Add(btn, colIndex, rowIndex);
