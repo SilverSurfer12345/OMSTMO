@@ -73,7 +73,7 @@ namespace OrderManagement.Model
 
             InitializeComponent();
             this.FormClosing += frmPOS_FormClosing;
-            SetupOrderTypeButtons();
+            SetupOrderTypeButtons(false);
             loadCategories();
             cbCustomDiscount.SelectedIndex = 0;
             alertTimer = new Timer();
@@ -119,7 +119,7 @@ namespace OrderManagement.Model
 
             // Setup the form
             this.FormClosing += frmPOS_FormClosing;
-            SetupOrderTypeButtons();
+            SetupOrderTypeButtons(true);
             loadCategories();
             cbCustomDiscount.SelectedIndex = 0;
 
@@ -166,11 +166,51 @@ namespace OrderManagement.Model
                 customerPostcode = order.Postcode;
                 currentOrderType = order.OrderType;
 
-                // Update UI controls
+               // Direct UI updates instead of PerformClick
+                Color selectedColor = Color.Green;
+
+                // Reset all buttons first
+                ResetOrderTypeButtons();
+
+                // Now set the appropriate button and UI based on order type
+                if (string.Equals(currentOrderType, "DELIVERY", StringComparison.OrdinalIgnoreCase))
+                {
+                    btnDel.BackColor = selectedColor;
+                    lblCstAddress.Visible = true;
+                    lblAddressDisplay.Visible = true;
+                    txtDeliveryCharge.Visible = true;
+                    btnDeliveryChargeAmend.Visible = true;
+                    OrderManagement.Model.DeliveryChargeManager.AutoCalculateDeliveryCharge(this);
+                }
+                else if (string.Equals(currentOrderType, "COLLECTION", StringComparison.OrdinalIgnoreCase))
+                {
+                    btnCol.BackColor = selectedColor;
+                    lblCstAddress.Visible = false;
+                    lblAddressDisplay.Visible = false;
+                    txtDeliveryCharge.Visible = false;
+                    btnDeliveryChargeAmend.Visible = false;
+                }
+                else if (string.Equals(currentOrderType, "WAITING", StringComparison.OrdinalIgnoreCase))
+                {
+                    btnWaiting.BackColor = selectedColor;
+                    lblCstAddress.Visible = false;
+                    lblAddressDisplay.Visible = false;
+                    txtDeliveryCharge.Visible = false;
+                    btnDeliveryChargeAmend.Visible = false;
+                }
+                else if (string.Equals(currentOrderType, "DINE IN", StringComparison.OrdinalIgnoreCase))
+                {
+                    btnDineIn.BackColor = selectedColor;
+                    lblCstAddress.Visible = false;
+                    lblAddressDisplay.Visible = false;
+                    txtDeliveryCharge.Visible = false;
+                    btnDeliveryChargeAmend.Visible = false;
+                }
+
+                // Continue with the rest of the method
                 txtCustomerDetails.Text = $"{customerForename} {customerSurname}";
                 txtCstTelephone.Text = customerTelephoneNo;
                 lblAddressDisplay.Text = order.Address;
-                // ... (rest of your UI logic)
 
                 // Load order items
                 var items = orderManager.GetOrderItems(orderId);
@@ -404,11 +444,11 @@ namespace OrderManagement.Model
 
         }
 
-        private void SetupOrderTypeButtons()
+        private void SetupOrderTypeButtons(bool skipDefaultSelection = false)
         {
             // Set default button colors
-            Color defaultColor = Color.FromArgb(241, 85, 126); // Your default color
-            Color selectedColor = Color.Green; // Color for selected button
+            Color defaultColor = Color.FromArgb(241, 85, 126);
+            Color selectedColor = Color.Green;
 
             btnDel.BackColor = defaultColor;
             btnCol.BackColor = defaultColor;
@@ -421,8 +461,9 @@ namespace OrderManagement.Model
             btnWaiting.Click -= new EventHandler(btnWaiting_Click);
             btnDineIn.Click -= new EventHandler(btnDineIn_Click);
 
-            // Add click handlers
+            // Add click handlers (your existing click handlers here)
             btnDel.Click += (s, e) => {
+
                 if (currentOrderType != "DELIVERY")
                 {
                     ResetOrderTypeButtons();
@@ -431,11 +472,8 @@ namespace OrderManagement.Model
                     lblCstAddress.Visible = true;
                     lblAddressDisplay.Visible = true;
 
-                    // Show delivery charge controls
-                    txtDeliveryCharge.Visible = true;
-                    btnDeliveryChargeAmend.Visible = true;
-
-                    AutoCalculateDeliveryCharge();
+                    // Centralized delivery charge UI and calculation
+                    OrderManagement.Model.DeliveryChargeManager.OrderTypeChanged(this, "DELIVERY");
                     CalculateTotal();
                 }
             };
@@ -491,15 +529,16 @@ namespace OrderManagement.Model
                 }
             };
 
+            if (!skipDefaultSelection)
+            {
+                // Set default selected button
+                btnWaiting.BackColor = selectedColor;
+                currentOrderType = "WAITING";
 
-
-            // Set default selected button
-            btnWaiting.BackColor = selectedColor; // Set Waiting as default instead of Collection
-            currentOrderType = "WAITING";
-
-            // Hide address fields for collection (default)
-            lblCstAddress.Visible = false;
-            lblAddressDisplay.Visible = false;
+                // Hide address fields for collection (default)
+                lblCstAddress.Visible = false;
+                lblAddressDisplay.Visible = false;
+            }
         }
 
         // Define empty methods to avoid errors if they're still referenced somewhere
@@ -538,7 +577,7 @@ namespace OrderManagement.Model
         }
 
 
-         // Add this method right after your existing CreateFoodItemButton method
+        // Add this method right after your existing CreateFoodItemButton method
         private Button CreateFoodItemButton(string itemName, decimal itemPrice, EventHandler onClick)
         {
             // Call the 4-parameter version with null image data
@@ -574,10 +613,10 @@ namespace OrderManagement.Model
                     using (MemoryStream ms = new MemoryStream(imageData))
                     {
                         Image img = Image.FromStream(ms);
-                        
+
                         // Store in cache
                         imageCache[itemName] = img;
-                        
+
                         btn.BackgroundImage = img;
                         btn.BackgroundImageLayout = ImageLayout.Stretch;
                         btn.ForeColor = Color.White;
@@ -600,7 +639,7 @@ namespace OrderManagement.Model
             return btn;
         }
 
-       
+
 
 
 
@@ -844,7 +883,7 @@ namespace OrderManagement.Model
             // Always update delivery charge and total price
             if (currentOrderType == "DELIVERY")
             {
-                AutoCalculateDeliveryCharge();
+                OrderManagement.Model.DeliveryChargeManager.AutoCalculateDeliveryCharge(this);
             }
             // Always recalculate the total price to reflect any delivery charge change
             CalculateTotal();
@@ -1185,8 +1224,7 @@ namespace OrderManagement.Model
                 if (isEditMode && editOrderId > 0)
                 {
                     // Parse the delivery charge
-                    decimal deliveryCharge = 0;
-                    decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
 
                     // Update existing order
                     string updateOrderQuery = @"
@@ -1235,8 +1273,7 @@ namespace OrderManagement.Model
                 {
                     // Save new order
                     // Parse the delivery charge from the textbox
-                    decimal deliveryCharge = 0;
-                    decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
                     orderId = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
 
@@ -1449,11 +1486,9 @@ namespace OrderManagement.Model
                 }
 
                 // Only add delivery charge if in DELIVERY mode
-                decimal deliveryCharge = 0;
-                if (currentOrderType == "DELIVERY" && !string.IsNullOrWhiteSpace(txtDeliveryCharge.Text))
+                if (currentOrderType == "DELIVERY")
                 {
-                    string chargeText = txtDeliveryCharge.Text.Replace("£", "").Trim();
-                    decimal.TryParse(chargeText, out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     total += deliveryCharge;
                 }
 
@@ -2023,8 +2058,7 @@ namespace OrderManagement.Model
                     // Save the order
 
                     // Parse the delivery charge from the textbox
-                    decimal deliveryCharge = 0;
-                    decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
                     orderIdValue = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
                     if (orderIdValue == -1)
@@ -2266,8 +2300,7 @@ namespace OrderManagement.Model
                 if (isEditMode && editOrderId > 0)
                 {
                     // Parse the delivery charge
-                    decimal deliveryCharge = 0;
-                    decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
 
                     // Update existing order
                     string updateOrderQuery = @"
@@ -2315,8 +2348,7 @@ namespace OrderManagement.Model
                 else
                 {
                     // Save new order
-                    decimal deliveryCharge = 0;
-                    decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
                     orderId = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
                     if (orderId == -1)
@@ -2575,12 +2607,7 @@ namespace OrderManagement.Model
                 price = price * (1 - discountRate);
 
                 // Add delivery charge if visible and valid
-                decimal deliveryCharge = 0;
-                if (txtDeliveryCharge.Visible && !string.IsNullOrWhiteSpace(txtDeliveryCharge.Text))
-                {
-                    string chargeText = txtDeliveryCharge.Text.Replace("£", "").Trim();
-                    decimal.TryParse(chargeText, out deliveryCharge);
-                }
+                decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                 price += deliveryCharge;
 
                 // Add preset charges
@@ -2962,56 +2989,56 @@ namespace OrderManagement.Model
 
 
 
-private void categoryList_SelectedIndexChanged(object sender, EventArgs e, string selectedCategory)
-{
-    // Clear the FlowLayoutPanel
-    flpItemView.Controls.Clear();
+        private void categoryList_SelectedIndexChanged(object sender, EventArgs e, string selectedCategory)
+        {
+            // Clear the FlowLayoutPanel
+            flpItemView.Controls.Clear();
 
-    // Ensure that a category is selected
-    if (string.IsNullOrEmpty(selectedCategory))
-    {
-        // Handle the case where no category is selected
-        return;
-    }
+            // Ensure that a category is selected
+            if (string.IsNullOrEmpty(selectedCategory))
+            {
+                // Handle the case where no category is selected
+                return;
+            }
 
-    string query = "SELECT Id, Item, price, icon FROM foodItems WHERE category = @category";
-    Dictionary<string, object> parameters = new Dictionary<string, object>
+            string query = "SELECT Id, Item, price, icon FROM foodItems WHERE category = @category";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
     {
         { "@category", selectedCategory }
     };
-    
-    DataTable dt = DatabaseManager.ExecuteQuery(query, parameters);
 
-    if (dt != null)
-    {
-        foreach (DataRow row in dt.Rows)
-        {
-            string itemName = row["Item"].ToString();
-            decimal itemPrice = Convert.ToDecimal(row["price"]);
-            byte[] imageData = null;
-            
-            // Get image data from database
-            if (row["icon"] != DBNull.Value)
-            {
-                imageData = (byte[])row["icon"];
-                Console.WriteLine($"Found image data for {itemName}: {imageData.Length} bytes");
-            }
-            else
-            {
-                Console.WriteLine($"No image data found for {itemName}");
-            }
-            
-            // Create button with image data
-            Button btn = CreateFoodItemButton(itemName, itemPrice, imageData, (s, ev) =>
-            {
-                dynamic tag = ((Button)s).Tag;
-                AddItemToBasket(tag.ItemName, tag.ItemPrice);
-            });
+            DataTable dt = DatabaseManager.ExecuteQuery(query, parameters);
 
-            flpItemView.Controls.Add(btn);
+            if (dt != null)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    string itemName = row["Item"].ToString();
+                    decimal itemPrice = Convert.ToDecimal(row["price"]);
+                    byte[] imageData = null;
+
+                    // Get image data from database
+                    if (row["icon"] != DBNull.Value)
+                    {
+                        imageData = (byte[])row["icon"];
+                        Console.WriteLine($"Found image data for {itemName}: {imageData.Length} bytes");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"No image data found for {itemName}");
+                    }
+
+                    // Create button with image data
+                    Button btn = CreateFoodItemButton(itemName, itemPrice, imageData, (s, ev) =>
+                    {
+                        dynamic tag = ((Button)s).Tag;
+                        AddItemToBasket(tag.ItemName, tag.ItemPrice);
+                    });
+
+                    flpItemView.Controls.Add(btn);
+                }
+            }
         }
-    }
-}
 
 
 
@@ -3659,65 +3686,10 @@ private void categoryList_SelectedIndexChanged(object sender, EventArgs e, strin
 
         }
 
-private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
-{
-    DeliveryChargeManager.ManageDeliveryCharges(this);
-}
-
-
-
-
-        private decimal CalculateDeliveryCharge(string postcode)
+        private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
         {
-            // Default charge
-            decimal defaultCharge = 0.00m;
-
-            if (string.IsNullOrWhiteSpace(postcode))
-                return defaultCharge;
-
-            // Clean up the postcode
-            postcode = postcode.ToUpper().Replace(" ", "");
-
-            try
-            {
-                // Always use the hardcoded connection string from DatabaseManager
-                string connectionString = OrderManagement.DatabaseManager.ConnectionString;
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-
-                    // Query to find the most specific matching postcode prefix
-                    string query = "SELECT TOP 1 Charge FROM DeliveryCharges WHERE @postcode LIKE PostcodePrefix + '%' ORDER BY LEN(PostcodePrefix) DESC";
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@postcode", postcode);
-                        object result = cmd.ExecuteScalar();
-
-                        if (result != null && result != DBNull.Value)
-                        {
-                            return Convert.ToDecimal(result);
-                        }
-                    }
-
-                    // If no specific match found, get the default charge
-                    using (SqlCommand cmd = new SqlCommand("SELECT Charge FROM DeliveryCharges WHERE PostcodePrefix = 'DEFAULT'", conn))
-                    {
-                        object result = cmd.ExecuteScalar();
-                        if (result != null && result != DBNull.Value)
-                        {
-                            return Convert.ToDecimal(result);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error retrieving delivery charge: " + ex.Message);
-            }
-
-            return defaultCharge;
+            OrderManagement.Model.DeliveryChargeManager.ManageDeliveryCharges(this);
         }
-
 
 
 
@@ -3726,25 +3698,7 @@ private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
 
         private void AutoCalculateDeliveryCharge()
         {
-            string postcode = "";
-            if (!string.IsNullOrEmpty(customerPostcode))
-            {
-                postcode = customerPostcode;
-            }
-            else if (!string.IsNullOrEmpty(lblAddressDisplay.Text))
-            {
-                string[] parts = lblAddressDisplay.Text.Split(',');
-                if (parts.Length > 0)
-                {
-                    postcode = parts[parts.Length - 1].Trim();
-                }
-            }
-
-            // Calculate delivery charge
-            decimal charge = CalculateDeliveryCharge(postcode);
-
-            // Update the delivery charge textbox
-            txtDeliveryCharge.Text = $"£{charge:0.00}";
+            OrderManagement.Model.DeliveryChargeManager.AutoCalculateDeliveryCharge(this);
         }
 
 
@@ -3791,8 +3745,7 @@ private void btnDeliveryChargeAmend_Click(object sender, EventArgs e)
             }
 
             // Calculate delivery charge
-            decimal deliveryCharge = 0;
-            decimal.TryParse(txtDeliveryCharge.Text.Replace("£", ""), out deliveryCharge);
+            decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
 
             // Get preset charges
             decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
