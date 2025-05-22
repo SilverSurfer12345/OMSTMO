@@ -775,63 +775,77 @@ namespace OrderManagement.Model
 
 
         private void basketGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-{
-    // Handle Remove button
-    if (e.RowIndex >= 0 && basketGridView.Columns[e.ColumnIndex].Name == "dgvDeleteBasketItem")
-    {
-        var row = basketGridView.Rows[e.RowIndex];
-        int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-
-        if (quantity > 1)
         {
-            // Just decrement the quantity by 1
-            row.Cells["dgvQty"].Value = quantity - 1;
-        }
-        else
-        {
-            // If quantity is 1, remove the row from the basket
-            basketGridView.Rows.RemoveAt(e.RowIndex);
-        }
-
-        // Update the total price label
-        UpdateTotalPriceLabel();
-    }
-
-    // Handle Extra Charge button
-    if (basketGridView.Columns[e.ColumnIndex].Name == "dgvExtraCharge" && e.RowIndex >= 0)
-    {
-        using (var popup = new OrderManagement.View.frmExtraChargePopup())
-        {
-            var row = basketGridView.Rows[e.RowIndex];
-            
-            // Get the current extra charge value
-            decimal currentExtra = 0;
-            decimal.TryParse(row.Cells["dgvExtraChargeValue"].Value?.ToString(), out currentExtra);
-            popup.SetCurrentExtraCharge(currentExtra);
-            
-            if (popup.ShowDialog(this) == DialogResult.OK)
+            // Handle Remove button
+            if (e.RowIndex >= 0 && basketGridView.Columns[e.ColumnIndex].Name == "dgvDeleteBasketItem")
             {
-                // Get the new extra charge from the popup
-                decimal newExtra = popup.GetSelectedAmount();
-                
-                // Get the original price and quantity
-                decimal originalPrice = 0;
-                decimal.TryParse(row.Cells["dgvOriginalPrice"].Value?.ToString(), out originalPrice);
+                var row = basketGridView.Rows[e.RowIndex];
                 int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-                
-                // Store the new extra charge value
-                row.Cells["dgvExtraChargeValue"].Value = newExtra;
-                
-                // Calculate the new total price for this row: (original price * quantity) + extra charge
-                decimal newTotalPrice = (originalPrice * quantity) + newExtra;
-                row.Cells["dgvPrice"].Value = newTotalPrice.ToString("0.00");
-                
-                // Update the total price
+
+                if (quantity > 1)
+                {
+                    // Just decrement the quantity by 1
+                    row.Cells["dgvQty"].Value = quantity - 1;
+
+                    // Recalculate the price based on original price and quantity
+                    decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
+                    decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
+                        Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
+
+                    row.Cells["dgvPrice"].Value = (originalPrice * (quantity - 1)) + extraCharge;
+                }
+                else
+                {
+                    // If quantity is 1, remove the row from the basket
+                    basketGridView.Rows.RemoveAt(e.RowIndex);
+                }
+
+                // Update the total price label
                 UpdateTotalPriceLabel();
+
+                // Mark as unsaved since we modified the basket
+                isOrderSaved = false;
+            }
+
+            // Handle Extra Charge button
+            if (basketGridView.Columns[e.ColumnIndex].Name == "dgvExtraCharge" && e.RowIndex >= 0)
+            {
+                using (var popup = new OrderManagement.View.frmExtraChargePopup())
+                {
+                    var row = basketGridView.Rows[e.RowIndex];
+
+                    // Get the current extra charge value
+                    decimal currentExtra = 0;
+                    decimal.TryParse(row.Cells["dgvExtraChargeValue"].Value?.ToString(), out currentExtra);
+                    popup.SetCurrentExtraCharge(currentExtra);
+
+                    if (popup.ShowDialog(this) == DialogResult.OK)
+                    {
+                        // Get the new extra charge from the popup
+                        decimal newExtra = popup.GetSelectedAmount();
+
+                        // Get the original price and quantity
+                        decimal originalPrice = 0;
+                        decimal.TryParse(row.Cells["dgvOriginalPrice"].Value?.ToString(), out originalPrice);
+                        int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
+
+                        // Store the new extra charge value
+                        row.Cells["dgvExtraChargeValue"].Value = newExtra;
+
+                        // Calculate the new total price for this row: (original price * quantity) + extra charge
+                        decimal newTotalPrice = (originalPrice * quantity) + newExtra;
+                        row.Cells["dgvPrice"].Value = newTotalPrice;
+
+                        // Update the total price
+                        UpdateTotalPriceLabel();
+
+                        // Mark as unsaved since we modified the basket
+                        isOrderSaved = false;
+                    }
+                }
             }
         }
-    }
-}
+
 
 
 
