@@ -93,15 +93,7 @@ namespace OrderManagement.Model
             orderAlertTimer.Tick += OrderAlertTimer_Tick;
             orderAlertTimer.Start();
 
-            if (!basketGridView.Columns.Contains("dgvOriginalPrice"))
-            {
-                var col = new DataGridViewTextBoxColumn
-                {
-                    Name = "dgvOriginalPrice",
-                    Visible = false
-                };
-                basketGridView.Columns.Add(col);
-            }
+
         }
 
 
@@ -151,15 +143,6 @@ namespace OrderManagement.Model
                     return;
                 }
 
-                // Make sure the dgvOriginalPrice column exists in the basketGridView
-                if (!basketGridView.Columns.Contains("dgvOriginalPrice"))
-                {
-                    DataGridViewTextBoxColumn originalPriceColumn = new DataGridViewTextBoxColumn();
-                    originalPriceColumn.Name = "dgvOriginalPrice";
-                    originalPriceColumn.HeaderText = "Original Price";
-                    originalPriceColumn.Visible = false; // Hidden column for tracking original price
-                    basketGridView.Columns.Add(originalPriceColumn);
-                }
 
                 // Set fields from DTO
                 orderIdValue = order.OrderId;
@@ -241,7 +224,7 @@ namespace OrderManagement.Model
                     if (!basketItemsByCategory.ContainsKey(category))
                         basketItemsByCategory[category] = new List<DataGridViewRow>();
                     basketItemsByCategory[category].Add(row);
-                
+
                 }
 
                 CalculateTotal();
@@ -780,7 +763,8 @@ namespace OrderManagement.Model
                 basketGridView.Rows[newRowIndex].Cells["dgvName"].Value = itemName;
                 basketGridView.Rows[newRowIndex].Cells["dgvPrice"].Value = itemPrice;
                 basketGridView.Rows[newRowIndex].Cells["dgvQty"].Value = 1;
-                basketGridView.Rows[newRowIndex].Cells["dgvOriginalPrice"].Value = itemPrice; // Store original price
+                basketGridView.Rows[newRowIndex].Cells["dgvOriginalPrice"].Value = itemPrice;
+                basketGridView.Rows[newRowIndex].Cells["dgvExtraChargeValue"].Value = 0m;
             }
             catch (Exception ex)
             {
@@ -791,28 +775,67 @@ namespace OrderManagement.Model
 
 
         private void basketGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+{
+    // Handle Remove button
+    if (e.RowIndex >= 0 && basketGridView.Columns[e.ColumnIndex].Name == "dgvDeleteBasketItem")
+    {
+        var row = basketGridView.Rows[e.RowIndex];
+        int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
+
+        if (quantity > 1)
         {
-            // Check if the clicked cell is the "Remove" button column
-            if (e.RowIndex >= 0 && basketGridView.Columns[e.ColumnIndex].Name == "dgvDeleteBasketItem")
+            // Just decrement the quantity by 1
+            row.Cells["dgvQty"].Value = quantity - 1;
+        }
+        else
+        {
+            // If quantity is 1, remove the row from the basket
+            basketGridView.Rows.RemoveAt(e.RowIndex);
+        }
+
+        // Update the total price label
+        UpdateTotalPriceLabel();
+    }
+
+    // Handle Extra Charge button
+    if (basketGridView.Columns[e.ColumnIndex].Name == "dgvExtraCharge" && e.RowIndex >= 0)
+    {
+        using (var popup = new OrderManagement.View.frmExtraChargePopup())
+        {
+            var row = basketGridView.Rows[e.RowIndex];
+            
+            // Get the current extra charge value
+            decimal currentExtra = 0;
+            decimal.TryParse(row.Cells["dgvExtraChargeValue"].Value?.ToString(), out currentExtra);
+            popup.SetCurrentExtraCharge(currentExtra);
+            
+            if (popup.ShowDialog(this) == DialogResult.OK)
             {
-                var row = basketGridView.Rows[e.RowIndex];
+                // Get the new extra charge from the popup
+                decimal newExtra = popup.GetSelectedAmount();
+                
+                // Get the original price and quantity
+                decimal originalPrice = 0;
+                decimal.TryParse(row.Cells["dgvOriginalPrice"].Value?.ToString(), out originalPrice);
                 int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-
-                if (quantity > 1)
-                {
-                    // Just decrement the quantity by 1
-                    row.Cells["dgvQty"].Value = quantity - 1;
-                }
-                else
-                {
-                    // If quantity is 1, remove the row from the basket
-                    basketGridView.Rows.RemoveAt(e.RowIndex);
-                }
-
-                // Optionally, update the total price label
+                
+                // Store the new extra charge value
+                row.Cells["dgvExtraChargeValue"].Value = newExtra;
+                
+                // Calculate the new total price for this row: (original price * quantity) + extra charge
+                decimal newTotalPrice = (originalPrice * quantity) + newExtra;
+                row.Cells["dgvPrice"].Value = newTotalPrice.ToString("0.00");
+                
+                // Update the total price
                 UpdateTotalPriceLabel();
             }
         }
+    }
+}
+
+
+
+
 
 
 
@@ -1883,37 +1906,36 @@ namespace OrderManagement.Model
 
 
         // Helper method to add an item to the basket
+        // Helper method to add an item to the basket
         private void AddItemToBasket(string itemName, decimal itemPrice)
         {
             // Check if the item already exists in the basket
-            bool itemExists = false;
-            foreach (DataGridViewRow row in basketGridView.Rows)
+            int existingItemIndex = GetExistingItemIndex(itemName);
+
+            if (existingItemIndex >= 0)
             {
-                if (row.Cells["dgvName"].Value != null && row.Cells["dgvName"].Value.ToString() == itemName)
-                {
-                    // Item exists, increment quantity
-                    int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value) + 1;
-                    row.Cells["dgvQty"].Value = quantity;
-                    itemExists = true;
-                    break;
-                }
+                // Item exists, just increment quantity
+                var row = basketGridView.Rows[existingItemIndex];
+                int currentQty = Convert.ToInt32(row.Cells["dgvQty"].Value) + 1;
+                row.Cells["dgvQty"].Value = currentQty;
+
+                // No need to recalculate price - dgvPrice stays the same
+            }
+            else
+            {
+                // Add new item to basket
+                AddNewItemToBasket(itemName, itemPrice);
             }
 
-            // If the item doesn't exist, add a new row
-            if (!itemExists)
-            {
-                int rowIndex = basketGridView.Rows.Add();
-                basketGridView.Rows[rowIndex].Cells["dgvName"].Value = itemName;
-                basketGridView.Rows[rowIndex].Cells["dgvQty"].Value = 1;
-                basketGridView.Rows[rowIndex].Cells["dgvPrice"].Value = itemPrice;
-            }
-
-            // Update the total price
-            CalculateTotal();
+            // Update the total price label
+            UpdateTotalPriceLabel();
 
             // Set isOrderSaved to false as the basket has changed
             isOrderSaved = false;
         }
+
+
+
 
 
 

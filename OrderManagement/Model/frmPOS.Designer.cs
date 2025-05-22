@@ -79,12 +79,6 @@
             this.cbCustomDiscount = new System.Windows.Forms.ComboBox();
             this.btnCallMe = new System.Windows.Forms.Button();
             this.basketGridView = new System.Windows.Forms.DataGridView();
-            this.dgvid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvExtraCharge = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.dgvDeleteBasketItem = new System.Windows.Forms.DataGridViewButtonColumn();
             this.pnlMainGridHolder = new System.Windows.Forms.Panel();
             this.pnlOrderHolder = new System.Windows.Forms.Panel();
             this.flpPreviousOrders = new System.Windows.Forms.FlowLayoutPanel();
@@ -94,6 +88,14 @@
             this.rmDataSet1 = new OrderManagement.RMDataSet();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn3 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.dgvid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvOriginalPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvExtraCharge = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dgvDeleteBasketItem = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dgvExtraChargeValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.pnlCstDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnExit)).BeginInit();
@@ -696,8 +698,10 @@
             this.dgvName,
             this.dgvQty,
             this.dgvPrice,
+            this.dgvOriginalPrice,
             this.dgvExtraCharge,
-            this.dgvDeleteBasketItem});
+            this.dgvDeleteBasketItem,
+            this.dgvExtraChargeValue});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -715,76 +719,6 @@
             this.basketGridView.Size = new System.Drawing.Size(429, 543);
             this.basketGridView.TabIndex = 8;
             this.basketGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.basketGridView_CellContentClick);
-            // 
-            // dgvid
-            // 
-            this.dgvid.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.dgvid.DataPropertyName = "catID";
-            this.dgvid.FillWeight = 10F;
-            this.dgvid.HeaderText = "id";
-            this.dgvid.MinimumWidth = 8;
-            this.dgvid.Name = "dgvid";
-            this.dgvid.ReadOnly = true;
-            this.dgvid.Visible = false;
-            this.dgvid.Width = 10;
-            // 
-            // dgvName
-            // 
-            this.dgvName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgvName.DataPropertyName = "catID";
-            this.dgvName.HeaderText = "Item Name";
-            this.dgvName.MinimumWidth = 8;
-            this.dgvName.Name = "dgvName";
-            // 
-            // dgvQty
-            // 
-            this.dgvQty.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgvQty.FillWeight = 50F;
-            this.dgvQty.HeaderText = "Qty";
-            this.dgvQty.MinimumWidth = 50;
-            this.dgvQty.Name = "dgvQty";
-            this.dgvQty.ReadOnly = true;
-            // 
-            // dgvPrice
-            // 
-            this.dgvPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgvPrice.FillWeight = 55F;
-            this.dgvPrice.HeaderText = "Price";
-            this.dgvPrice.MinimumWidth = 55;
-            this.dgvPrice.Name = "dgvPrice";
-            this.dgvPrice.ReadOnly = true;
-            // 
-            // dgvExtraCharge
-            // 
-            this.dgvExtraCharge.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgvExtraCharge.FillWeight = 50F;
-            this.dgvExtraCharge.HeaderText = "";
-            this.dgvExtraCharge.MinimumWidth = 50;
-            this.dgvExtraCharge.Name = "dgvExtraCharge";
-            this.dgvExtraCharge.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvExtraCharge.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.dgvExtraCharge.Text = "ADD";
-            // 
-            // dgvDeleteBasketItem
-            // 
-            this.dgvDeleteBasketItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvDeleteBasketItem.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvDeleteBasketItem.FillWeight = 50F;
-            this.dgvDeleteBasketItem.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.dgvDeleteBasketItem.HeaderText = "";
-            this.dgvDeleteBasketItem.MinimumWidth = 50;
-            this.dgvDeleteBasketItem.Name = "dgvDeleteBasketItem";
-            this.dgvDeleteBasketItem.ReadOnly = true;
-            this.dgvDeleteBasketItem.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvDeleteBasketItem.Text = "REMOVE";
-            this.dgvDeleteBasketItem.ToolTipText = "DELETE";
-            this.dgvDeleteBasketItem.UseColumnTextForButtonValue = true;
             // 
             // pnlMainGridHolder
             // 
@@ -874,6 +808,90 @@
             this.dataGridViewImageColumn3.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dataGridViewImageColumn3.MinimumWidth = 50;
             this.dataGridViewImageColumn3.Name = "dataGridViewImageColumn3";
+            // 
+            // dgvid
+            // 
+            this.dgvid.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dgvid.DataPropertyName = "catID";
+            this.dgvid.FillWeight = 10F;
+            this.dgvid.HeaderText = "id";
+            this.dgvid.MinimumWidth = 8;
+            this.dgvid.Name = "dgvid";
+            this.dgvid.ReadOnly = true;
+            this.dgvid.Visible = false;
+            this.dgvid.Width = 10;
+            // 
+            // dgvName
+            // 
+            this.dgvName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvName.DataPropertyName = "catID";
+            this.dgvName.HeaderText = "Item Name";
+            this.dgvName.MinimumWidth = 8;
+            this.dgvName.Name = "dgvName";
+            // 
+            // dgvQty
+            // 
+            this.dgvQty.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvQty.FillWeight = 50F;
+            this.dgvQty.HeaderText = "Qty";
+            this.dgvQty.MinimumWidth = 50;
+            this.dgvQty.Name = "dgvQty";
+            this.dgvQty.ReadOnly = true;
+            // 
+            // dgvPrice
+            // 
+            this.dgvPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvPrice.FillWeight = 55F;
+            this.dgvPrice.HeaderText = "Price";
+            this.dgvPrice.MinimumWidth = 55;
+            this.dgvPrice.Name = "dgvPrice";
+            this.dgvPrice.ReadOnly = true;
+            // 
+            // dgvOriginalPrice
+            // 
+            this.dgvOriginalPrice.HeaderText = "Original Price";
+            this.dgvOriginalPrice.MinimumWidth = 8;
+            this.dgvOriginalPrice.Name = "dgvOriginalPrice";
+            this.dgvOriginalPrice.Visible = false;
+            // 
+            // dgvExtraCharge
+            // 
+            this.dgvExtraCharge.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgvExtraCharge.FillWeight = 50F;
+            this.dgvExtraCharge.HeaderText = "";
+            this.dgvExtraCharge.MinimumWidth = 50;
+            this.dgvExtraCharge.Name = "dgvExtraCharge";
+            this.dgvExtraCharge.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvExtraCharge.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dgvExtraCharge.Text = "ADD";
+            // 
+            // dgvDeleteBasketItem
+            // 
+            this.dgvDeleteBasketItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvDeleteBasketItem.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvDeleteBasketItem.FillWeight = 50F;
+            this.dgvDeleteBasketItem.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.dgvDeleteBasketItem.HeaderText = "";
+            this.dgvDeleteBasketItem.MinimumWidth = 50;
+            this.dgvDeleteBasketItem.Name = "dgvDeleteBasketItem";
+            this.dgvDeleteBasketItem.ReadOnly = true;
+            this.dgvDeleteBasketItem.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvDeleteBasketItem.Text = "REMOVE";
+            this.dgvDeleteBasketItem.ToolTipText = "DELETE";
+            this.dgvDeleteBasketItem.UseColumnTextForButtonValue = true;
+            // 
+            // dgvExtraChargeValue
+            // 
+            this.dgvExtraChargeValue.HeaderText = "Extra Charge";
+            this.dgvExtraChargeValue.MinimumWidth = 8;
+            this.dgvExtraChargeValue.Name = "dgvExtraChargeValue";
+            this.dgvExtraChargeValue.Visible = false;
             // 
             // frmPOS
             // 
@@ -966,13 +984,15 @@
         private System.Windows.Forms.TextBox txtDeliveryCharge;
         private System.Windows.Forms.Button btnDeliveryChargeAmend;
         private System.Windows.Forms.Button btnAutoAdd;
+        private System.Windows.Forms.TextBox txtSearchFoodItem;
+        private System.Windows.Forms.Label lblSearchFoodItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvid;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvName;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvQty;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvOriginalPrice;
         private System.Windows.Forms.DataGridViewButtonColumn dgvExtraCharge;
         private System.Windows.Forms.DataGridViewButtonColumn dgvDeleteBasketItem;
-        private System.Windows.Forms.TextBox txtSearchFoodItem;
-        private System.Windows.Forms.Label lblSearchFoodItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgvExtraChargeValue;
     }
 }

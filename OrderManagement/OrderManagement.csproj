@@ -252,7 +252,7 @@
     <Compile Include="View\frmDeliveryCharges.Designer.cs">
       <DependentUpon>frmDeliveryCharges.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\frmExtraCharge.cs">
+    <Compile Include="View\frmExtraChargePopup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\frmPresetCharges.cs">
