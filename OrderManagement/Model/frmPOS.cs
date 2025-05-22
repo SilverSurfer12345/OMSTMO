@@ -151,6 +151,16 @@ namespace OrderManagement.Model
                     return;
                 }
 
+                // Make sure the dgvOriginalPrice column exists in the basketGridView
+                if (!basketGridView.Columns.Contains("dgvOriginalPrice"))
+                {
+                    DataGridViewTextBoxColumn originalPriceColumn = new DataGridViewTextBoxColumn();
+                    originalPriceColumn.Name = "dgvOriginalPrice";
+                    originalPriceColumn.HeaderText = "Original Price";
+                    originalPriceColumn.Visible = false; // Hidden column for tracking original price
+                    basketGridView.Columns.Add(originalPriceColumn);
+                }
+
                 // Set fields from DTO
                 orderIdValue = order.OrderId;
                 id = order.CustomerId;
@@ -166,7 +176,7 @@ namespace OrderManagement.Model
                 customerPostcode = order.Postcode;
                 currentOrderType = order.OrderType;
 
-               // Direct UI updates instead of PerformClick
+                // Direct UI updates instead of PerformClick
                 Color selectedColor = Color.Green;
 
                 // Reset all buttons first
@@ -218,13 +228,27 @@ namespace OrderManagement.Model
                 basketItemsByCategory.Clear();
                 foreach (var item in items)
                 {
-                    for (int i = 0; i < item.Quantity; i++)
-                        AddItemToBasket(item.ItemName, item.ItemPrice);
-                }
-                CalculateTotal();
+                    int rowIndex = basketGridView.Rows.Add();
+                    DataGridViewRow row = basketGridView.Rows[rowIndex];
 
+                    row.Cells["dgvName"].Value = item.ItemName;
+                    row.Cells["dgvPrice"].Value = item.ItemPrice;
+                    row.Cells["dgvQty"].Value = item.Quantity; // Set the correct quantity
+                    row.Cells["dgvOriginalPrice"].Value = item.ItemPrice;
+
+                    // Organize items by category if using that feature
+                    string category = "General"; // Default category
+                    if (!basketItemsByCategory.ContainsKey(category))
+                        basketItemsByCategory[category] = new List<DataGridViewRow>();
+                    basketItemsByCategory[category].Add(row);
+                
+                }
+
+                CalculateTotal();
                 LoadPreviousOrderItems(id);
                 isOrderSaved = true;
+                isEditMode = true;
+                editOrderId = orderId;
             }
             catch (Exception ex)
             {
@@ -768,78 +792,25 @@ namespace OrderManagement.Model
 
         private void basketGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || basketGridView.CurrentCell == null ||
-                basketGridView.CurrentCell.OwningColumn == null)
+            // Check if the clicked cell is the "Remove" button column
+            if (e.RowIndex >= 0 && basketGridView.Columns[e.ColumnIndex].Name == "dgvDeleteBasketItem")
             {
-                return;
-            }
+                var row = basketGridView.Rows[e.RowIndex];
+                int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
 
-            if (basketGridView.CurrentCell.OwningColumn.Name == "dgvDeleteBasketItem")
-            {
-                int rowIndex = e.RowIndex;
-
-                string itemName = SafeOperations.SafeGetCellString(basketGridView, rowIndex, "dgvName");
-                if (string.IsNullOrEmpty(itemName))
+                if (quantity > 1)
                 {
-                    return;
-                }
-
-                // Use the price from the basket, not the database
-                int currentQty = SafeOperations.SafeGetCellInt(basketGridView, rowIndex, "dgvQty");
-                decimal itemPrice = 0;
-                if (currentQty > 0)
-                {
-                    decimal totalPrice = SafeOperations.SafeGetCellDecimal(basketGridView, rowIndex, "dgvPrice");
-                    itemPrice = totalPrice / currentQty;
-                }
-
-                bool shouldRemoveRow = currentQty <= 1;
-
-                if (shouldRemoveRow)
-                {
-                    basketGridView.Rows.RemoveAt(rowIndex);
+                    // Just decrement the quantity by 1
+                    row.Cells["dgvQty"].Value = quantity - 1;
                 }
                 else
                 {
-                    currentQty = currentQty - 1;
-                    basketGridView.Rows[rowIndex].Cells["dgvQty"].Value = currentQty;
-                    basketGridView.Rows[rowIndex].Cells["dgvPrice"].Value = itemPrice * currentQty;
+                    // If quantity is 1, remove the row from the basket
+                    basketGridView.Rows.RemoveAt(e.RowIndex);
                 }
 
-                CalculateTotal();
-                isOrderSaved = false;
-            }
-            // New: Handle Extra Charge button
-            else if (basketGridView.CurrentCell.OwningColumn.Name == "dgvExtraCharge")
-            {
-                int rowIndex = e.RowIndex;
-                var row = basketGridView.Rows[rowIndex];
-
-                using (var extraForm = new OrderManagement.View.frmExtraCharge())
-                {
-                    if (extraForm.ShowDialog() == DialogResult.OK)
-                    {
-                        decimal extraCharge = extraForm.ExtraValue;
-
-                        // Always use the original price as the base
-                        decimal originalPrice = 0;
-                        if (row.Cells["dgvOriginalPrice"].Value != null)
-                            decimal.TryParse(row.Cells["dgvOriginalPrice"].Value.ToString(), out originalPrice);
-                        else
-                        {
-                            // Fallback: set original price if not set yet
-                            decimal.TryParse(row.Cells["dgvPrice"].Value.ToString(), out originalPrice);
-                            row.Cells["dgvOriginalPrice"].Value = originalPrice;
-                        }
-
-                        row.Cells["dgvPrice"].Value = (originalPrice + extraCharge).ToString("0.00");
-
-                        // Optionally, store/display the extra charge in another column
-                        // row.Cells["dgvExtraValue"].Value = extraCharge;
-
-                        CalculateTotal();
-                    }
-                }
+                // Optionally, update the total price label
+                UpdateTotalPriceLabel();
             }
         }
 
