@@ -32,7 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pnlFooter = new System.Windows.Forms.Panel();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.pnlGridHolder = new System.Windows.Forms.Panel();
             this.txtSearchBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -73,9 +73,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderHistoryView)).BeginInit();
             this.pnlActions.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // pnlHeader
-            //
+            // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(55)))), ((int)(((byte)(89)))));
             this.pnlHeader.Controls.Add(this.label1);
             this.pnlHeader.Controls.Add(this.pictureBox1);
@@ -84,9 +84,9 @@
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1499, 126);
             this.pnlHeader.TabIndex = 1;
-            //
+            // 
             // label1
-            //
+            // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
@@ -95,9 +95,9 @@
             this.label1.Size = new System.Drawing.Size(287, 60);
             this.label1.TabIndex = 1;
             this.label1.Text = "Order History";
-            //
+            // 
             // pictureBox1
-            //
+            // 
             this.pictureBox1.Image = global::OrderManagement.Properties.Resources.map_search_icon1;
             this.pictureBox1.Location = new System.Drawing.Point(8, 8);
             this.pictureBox1.Name = "pictureBox1";
@@ -105,31 +105,32 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            //
+            // 
             // pnlFooter
-            //
+            // 
             this.pnlFooter.BackColor = System.Drawing.Color.Gainsboro;
-            this.pnlFooter.Controls.Add(this.btnCancel);
+            this.pnlFooter.Controls.Add(this.btnClose);
             this.pnlFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlFooter.Location = new System.Drawing.Point(0, 949);
             this.pnlFooter.Name = "pnlFooter";
             this.pnlFooter.Size = new System.Drawing.Size(1499, 82);
             this.pnlFooter.TabIndex = 2;
-            //
-            // btnCancel
-            //
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(55)))), ((int)(((byte)(89)))));
-            this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(1336, 0);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(157, 63);
-            this.btnCancel.TabIndex = 2;
-            this.btnCancel.Text = "Close";
-            this.btnCancel.UseVisualStyleBackColor = false;
-            //
+            // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(55)))), ((int)(((byte)(89)))));
+            this.btnClose.ForeColor = System.Drawing.Color.White;
+            this.btnClose.Location = new System.Drawing.Point(1336, 0);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(157, 63);
+            this.btnClose.TabIndex = 2;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // pnlGridHolder
-            //
+            // 
             this.pnlGridHolder.Controls.Add(this.txtSearchBox);
             this.pnlGridHolder.Controls.Add(this.label7);
             this.pnlGridHolder.Controls.Add(this.label3);
@@ -142,17 +143,17 @@
             this.pnlGridHolder.Name = "pnlGridHolder";
             this.pnlGridHolder.Size = new System.Drawing.Size(1096, 823);
             this.pnlGridHolder.TabIndex = 3;
-            //
+            // 
             // txtSearchBox
-            //
+            // 
             this.txtSearchBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearchBox.Location = new System.Drawing.Point(776, 16);
             this.txtSearchBox.Name = "txtSearchBox";
             this.txtSearchBox.Size = new System.Drawing.Size(288, 34);
             this.txtSearchBox.TabIndex = 6;
-            //
+            // 
             // label7
-            //
+            // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI Black", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(704, 24);
@@ -160,9 +161,9 @@
             this.label7.Size = new System.Drawing.Size(62, 21);
             this.label7.TabIndex = 5;
             this.label7.Text = "Search";
-            //
+            // 
             // label3
-            //
+            // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Black", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(376, 24);
@@ -170,9 +171,9 @@
             this.label3.Size = new System.Drawing.Size(79, 21);
             this.label3.TabIndex = 4;
             this.label3.Text = "Payment";
-            //
+            // 
             // label2
-            //
+            // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Black", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(16, 24);
@@ -180,9 +181,9 @@
             this.label2.Size = new System.Drawing.Size(97, 21);
             this.label2.TabIndex = 3;
             this.label2.Text = "Order Type";
-            //
+            // 
             // cmbPaymentType
-            //
+            // 
             this.cmbPaymentType.Font = new System.Drawing.Font("Segoe UI Black", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbPaymentType.FormattingEnabled = true;
             this.cmbPaymentType.Items.AddRange(new object[] {
@@ -196,9 +197,9 @@
             this.cmbPaymentType.Name = "cmbPaymentType";
             this.cmbPaymentType.Size = new System.Drawing.Size(216, 29);
             this.cmbPaymentType.TabIndex = 2;
-            //
+            // 
             // cmbOrderType
-            //
+            // 
             this.cmbOrderType.Font = new System.Drawing.Font("Segoe UI Black", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbOrderType.FormattingEnabled = true;
             this.cmbOrderType.Items.AddRange(new object[] {
@@ -213,12 +214,12 @@
             this.cmbOrderType.Name = "cmbOrderType";
             this.cmbOrderType.Size = new System.Drawing.Size(216, 29);
             this.cmbOrderType.TabIndex = 1;
-            //
+            // 
             // dgvOrderHistoryView
-            //
+            // 
             this.dgvOrderHistoryView.AllowUserToAddRows = false;
-            this.dgvOrderHistoryView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.dgvOrderHistoryView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvOrderHistoryView.BackgroundColor = System.Drawing.Color.White;
             this.dgvOrderHistoryView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -241,66 +242,66 @@
             this.dgvOrderHistoryView.RowTemplate.Height = 28;
             this.dgvOrderHistoryView.Size = new System.Drawing.Size(1056, 752);
             this.dgvOrderHistoryView.TabIndex = 0;
-            //
+            // 
             // dgvOrderId
-            //
+            // 
             this.dgvOrderId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvOrderId.DataPropertyName = "dgvOrderId";
             this.dgvOrderId.HeaderText = "Order ID";
             this.dgvOrderId.MinimumWidth = 8;
             this.dgvOrderId.Name = "dgvOrderId";
             this.dgvOrderId.Visible = false;
-            //
+            // 
             // dgvName
-            //
+            // 
             this.dgvName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvName.DataPropertyName = "dgvName";
             this.dgvName.HeaderText = "Customer Name";
             this.dgvName.MinimumWidth = 8;
             this.dgvName.Name = "dgvName";
-            //
+            // 
             // dgvAddress
-            //
+            // 
             this.dgvAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvAddress.DataPropertyName = "dgvAddress";
             this.dgvAddress.HeaderText = "Address";
             this.dgvAddress.MinimumWidth = 8;
             this.dgvAddress.Name = "dgvAddress";
-            //
+            // 
             // dgvOrderType
-            //
+            // 
             this.dgvOrderType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvOrderType.DataPropertyName = "dgvOrderType";
             this.dgvOrderType.HeaderText = "Order Type";
             this.dgvOrderType.MinimumWidth = 8;
             this.dgvOrderType.Name = "dgvOrderType";
-            //
+            // 
             // dgvOrderDate
-            //
+            // 
             this.dgvOrderDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvOrderDate.DataPropertyName = "dgvOrderDate";
             this.dgvOrderDate.HeaderText = "Order Date";
             this.dgvOrderDate.MinimumWidth = 8;
             this.dgvOrderDate.Name = "dgvOrderDate";
-            //
+            // 
             // dgvTotalPrice
-            //
+            // 
             this.dgvTotalPrice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvTotalPrice.DataPropertyName = "dgvTotalPrice";
             this.dgvTotalPrice.HeaderText = "Total Price";
             this.dgvTotalPrice.MinimumWidth = 8;
             this.dgvTotalPrice.Name = "dgvTotalPrice";
-            //
+            // 
             // dgvPayment
-            //
+            // 
             this.dgvPayment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvPayment.DataPropertyName = "dgvPayment";
             this.dgvPayment.HeaderText = "Payment";
             this.dgvPayment.MinimumWidth = 8;
             this.dgvPayment.Name = "dgvPayment";
-            //
+            // 
             // dgvView
-            //
+            // 
             this.dgvView.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvView.DataPropertyName = "dgvView";
             this.dgvView.HeaderText = "";
@@ -309,9 +310,9 @@
             this.dgvView.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvView.Text = "View";
             this.dgvView.UseColumnTextForButtonValue = true;
-            //
+            // 
             // dgvCancel
-            //
+            // 
             this.dgvCancel.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvCancel.DataPropertyName = "dgvCancel";
             this.dgvCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -321,18 +322,18 @@
             this.dgvCancel.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dgvCancel.Text = "CANCEL";
             this.dgvCancel.UseColumnTextForButtonValue = true;
-            //
+            // 
             // dgvDelete
-            //
+            // 
             this.dgvDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.dgvDelete.HeaderText = "";
             this.dgvDelete.MinimumWidth = 8;
             this.dgvDelete.Name = "dgvDelete";
             this.dgvDelete.Text = "DELETE";
             this.dgvDelete.UseColumnTextForButtonValue = true;
-            //
+            // 
             // pnlActions
-            //
+            // 
             this.pnlActions.Controls.Add(this.btnCalculations);
             this.pnlActions.Controls.Add(this.btnReset);
             this.pnlActions.Controls.Add(this.lblTotal);
@@ -349,27 +350,27 @@
             this.pnlActions.Name = "pnlActions";
             this.pnlActions.Size = new System.Drawing.Size(408, 823);
             this.pnlActions.TabIndex = 0;
-            //
+            // 
             // btnCalculations
-            //
+            // 
             this.btnCalculations.Location = new System.Drawing.Point(112, 398);
             this.btnCalculations.Name = "btnCalculations";
             this.btnCalculations.Size = new System.Drawing.Size(184, 72);
             this.btnCalculations.TabIndex = 13;
             this.btnCalculations.Text = "View Report";
             this.btnCalculations.UseVisualStyleBackColor = true;
-            //
+            // 
             // btnReset
-            //
+            // 
             this.btnReset.Location = new System.Drawing.Point(216, 320);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(168, 72);
             this.btnReset.TabIndex = 12;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
-            //
+            // 
             // lblTotal
-            //
+            // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotal.Location = new System.Drawing.Point(8, 776);
@@ -377,44 +378,44 @@
             this.lblTotal.Size = new System.Drawing.Size(99, 38);
             this.lblTotal.TabIndex = 11;
             this.lblTotal.Text = "Total:";
-            //
+            // 
             // txtTotalValue
-            //
+            // 
             this.txtTotalValue.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTotalValue.Location = new System.Drawing.Point(112, 776);
             this.txtTotalValue.Name = "txtTotalValue";
             this.txtTotalValue.Size = new System.Drawing.Size(288, 39);
             this.txtTotalValue.TabIndex = 10;
-            //
+            // 
             // btnToday
-            //
+            // 
             this.btnToday.Location = new System.Drawing.Point(16, 320);
             this.btnToday.Name = "btnToday";
             this.btnToday.Size = new System.Drawing.Size(184, 72);
             this.btnToday.TabIndex = 6;
             this.btnToday.Text = "Today";
             this.btnToday.UseVisualStyleBackColor = true;
-            //
+            // 
             // btnDownload
-            //
+            // 
             this.btnDownload.Location = new System.Drawing.Point(216, 240);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(168, 72);
             this.btnDownload.TabIndex = 5;
             this.btnDownload.Text = "Download";
             this.btnDownload.UseVisualStyleBackColor = true;
-            //
+            // 
             // btnPrint
-            //
+            // 
             this.btnPrint.Location = new System.Drawing.Point(16, 240);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(184, 72);
             this.btnPrint.TabIndex = 4;
             this.btnPrint.Text = "Print";
             this.btnPrint.UseVisualStyleBackColor = true;
-            //
+            // 
             // lblToDate
-            //
+            // 
             this.lblToDate.AutoSize = true;
             this.lblToDate.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblToDate.Location = new System.Drawing.Point(8, 128);
@@ -422,17 +423,17 @@
             this.lblToDate.Size = new System.Drawing.Size(135, 38);
             this.lblToDate.TabIndex = 3;
             this.lblToDate.Text = "To Date:";
-            //
+            // 
             // dtpToDate
-            //
+            // 
             this.dtpToDate.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpToDate.Location = new System.Drawing.Point(16, 176);
             this.dtpToDate.Name = "dtpToDate";
             this.dtpToDate.Size = new System.Drawing.Size(376, 40);
             this.dtpToDate.TabIndex = 2;
-            //
+            // 
             // lblFromDate
-            //
+            // 
             this.lblFromDate.AutoSize = true;
             this.lblFromDate.Font = new System.Drawing.Font("Segoe UI Black", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFromDate.Location = new System.Drawing.Point(8, 24);
@@ -440,43 +441,43 @@
             this.lblFromDate.Size = new System.Drawing.Size(171, 38);
             this.lblFromDate.TabIndex = 1;
             this.lblFromDate.Text = "From Date:";
-            //
+            // 
             // dtpFromDate
-            //
+            // 
             this.dtpFromDate.Font = new System.Drawing.Font("Segoe UI Black", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpFromDate.Location = new System.Drawing.Point(16, 72);
             this.dtpFromDate.Name = "dtpFromDate";
             this.dtpFromDate.Size = new System.Drawing.Size(376, 40);
             this.dtpFromDate.TabIndex = 0;
-            //
+            // 
             // dataGridViewImageColumn1
-            //
+            // 
             this.dataGridViewImageColumn1.HeaderText = "";
             this.dataGridViewImageColumn1.Image = global::OrderManagement.Properties.Resources.pen_tool_icon2;
             this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dataGridViewImageColumn1.MinimumWidth = 8;
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.Width = 150;
-            //
+            // 
             // dataGridViewImageColumn2
-            //
+            // 
             this.dataGridViewImageColumn2.HeaderText = "";
             this.dataGridViewImageColumn2.Image = global::OrderManagement.Properties.Resources.find_product_icon1;
             this.dataGridViewImageColumn2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.dataGridViewImageColumn2.MinimumWidth = 8;
             this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
             this.dataGridViewImageColumn2.Width = 150;
-            //
+            // 
             // dataGridViewImageColumn3
-            //
+            // 
             this.dataGridViewImageColumn3.HeaderText = "";
             this.dataGridViewImageColumn3.Image = global::OrderManagement.Properties.Resources.red_x_line_icon;
             this.dataGridViewImageColumn3.MinimumWidth = 8;
             this.dataGridViewImageColumn3.Name = "dataGridViewImageColumn3";
             this.dataGridViewImageColumn3.Width = 150;
-            //
+            // 
             // frmOrderHistory
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -509,7 +510,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel pnlFooter;
-        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel pnlGridHolder;
         private System.Windows.Forms.Panel pnlActions;
         private System.Windows.Forms.ComboBox cmbPaymentType;
