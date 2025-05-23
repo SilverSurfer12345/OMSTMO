@@ -168,6 +168,9 @@
     <Compile Include="frmPOS\CustomerManager.cs" />
     <Compile Include="frmPOS\IPosPresenter.cs" />
     <Compile Include="frmPOS\IPosView.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\IOrderHistoryPresenter.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\IOrderHistoryView.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\OrderHistoryPresenter.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormPresenter.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormView.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\OrderViewFormPresenter.cs" />
@@ -289,10 +292,10 @@
     <Compile Include="View\frmCategoryView.Designer.cs">
       <DependentUpon>frmCategoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmPOS\OrderManagement\frmOrderHistory.cs">
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\frmOrderHistory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmPOS\OrderManagement\frmOrderHistory.Designer.cs">
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\frmOrderHistory.Designer.cs">
       <DependentUpon>frmOrderHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="View\frmOrderProgress.cs">
@@ -375,7 +378,7 @@
     <EmbeddedResource Include="View\frmDeliveryCharges.resx">
       <DependentUpon>frmDeliveryCharges.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmPOS\OrderManagement\frmOrderHistory.resx">
+    <EmbeddedResource Include="frmPOS\OrderManagement\OrderHistory\frmOrderHistory.resx">
       <DependentUpon>frmOrderHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\frmOrderProgress.resx">
