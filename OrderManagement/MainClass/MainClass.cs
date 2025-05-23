@@ -643,7 +643,7 @@ namespace OrderManagement
             }
         }
 
-        public static int SaveOrderItem(int orderId, string itemName, decimal itemPrice, int quantity)
+        public static int SaveOrderItem(int orderId, string itemName, decimal itemPrice, int quantity, decimal extraCharge = 0)
         {
             SqlConnection con = null;
             SqlTransaction transaction = null;
@@ -681,20 +681,20 @@ namespace OrderManagement
                 }
 
                 string sql = @"
-            INSERT INTO OrderItems 
-                (OrderId, ItemId, ItemName, ItemPrice, Quantity, DateAdded) 
-            VALUES 
-                (@OrderId, @ItemId, @ItemName, @ItemPrice, @Quantity, GETDATE());
-            SELECT SCOPE_IDENTITY();";
+    INSERT INTO OrderItems 
+        (OrderId, ItemId, ItemName, ItemPrice, Quantity, DateAdded, ExtraCharge) 
+    VALUES 
+        (@OrderId, @ItemId, @ItemName, @ItemPrice, @Quantity, GETDATE(), @ExtraCharge);
+    SELECT SCOPE_IDENTITY();";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con, transaction))
                 {
                     cmd.Parameters.Add("@OrderId", SqlDbType.Int).Value = orderId;
-                    // If itemId is null, set DBNull.Value
                     cmd.Parameters.Add("@ItemId", SqlDbType.Int).Value = (object)itemId ?? DBNull.Value;
                     cmd.Parameters.Add("@ItemName", SqlDbType.VarChar, 100).Value = itemName;
                     cmd.Parameters.Add("@ItemPrice", SqlDbType.Decimal).Value = itemPrice;
                     cmd.Parameters.Add("@Quantity", SqlDbType.Int).Value = quantity;
+                    cmd.Parameters.Add("@ExtraCharge", SqlDbType.Decimal).Value = extraCharge;
 
                     var newId = cmd.ExecuteScalar();
                     int orderItemId = newId == null ? -1 : Convert.ToInt32(newId);
@@ -730,6 +730,7 @@ namespace OrderManagement
                 }
             }
         }
+
 
         public static object ExecuteScalar(string query, Dictionary<string, object> parameters)
         {

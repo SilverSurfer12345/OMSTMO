@@ -28,10 +28,12 @@ public class OrderDetailsDto
 
 public class OrderItemDto
 {
-    public string ItemName;
-    public decimal ItemPrice;
-    public int Quantity;
+    public string ItemName { get; set; }
+    public decimal ItemPrice { get; set; }
+    public int Quantity { get; set; }
+    public decimal ExtraCharge { get; set; }
 }
+
 
 public class OrderManager
 {
@@ -79,9 +81,9 @@ public class OrderManager
     public List<OrderItemDto> GetOrderItems(int orderId)
     {
         string query = @"
-            SELECT ItemName, ItemPrice, Quantity
-            FROM OrderItems
-            WHERE OrderId = @OrderId";
+        SELECT ItemName, ItemPrice, Quantity, ExtraCharge
+        FROM OrderItems
+        WHERE OrderId = @OrderId";
         var parameters = new Dictionary<string, object> { { "@OrderId", orderId } };
         DataTable dt = DatabaseManager.ExecuteQuery(query, parameters);
 
@@ -94,10 +96,12 @@ public class OrderManager
                 {
                     ItemName = row["ItemName"].ToString(),
                     ItemPrice = Convert.ToDecimal(row["ItemPrice"]),
-                    Quantity = Convert.ToInt32(row["Quantity"])
+                    Quantity = Convert.ToInt32(row["Quantity"]),
+                    ExtraCharge = row["ExtraCharge"] != DBNull.Value ? Convert.ToDecimal(row["ExtraCharge"]) : 0m
                 });
             }
         }
         return items;
     }
 }
+

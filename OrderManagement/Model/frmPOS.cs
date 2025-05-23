@@ -751,26 +751,41 @@ namespace OrderManagement.Model
         // C# OrderManagement\Model\frmPOS.cs
         private void AddNewItemToBasket(string itemName, decimal itemPrice)
         {
-            if (string.IsNullOrEmpty(itemName))
-            {
-                MessageBox.Show("Cannot add item with empty name to basket", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             try
             {
-                int newRowIndex = basketGridView.Rows.Add();
-                basketGridView.Rows[newRowIndex].Cells["dgvName"].Value = itemName;
-                basketGridView.Rows[newRowIndex].Cells["dgvPrice"].Value = itemPrice;
-                basketGridView.Rows[newRowIndex].Cells["dgvQty"].Value = 1;
-                basketGridView.Rows[newRowIndex].Cells["dgvOriginalPrice"].Value = itemPrice;
-                basketGridView.Rows[newRowIndex].Cells["dgvExtraChargeValue"].Value = 0m;
+                // Get the latest price from the database
+                string query = "SELECT price FROM foodItems WHERE Item = @ItemName";
+                Dictionary<string, object> parameters = new Dictionary<string, object>
+        {
+            { "@ItemName", itemName }
+        };
+
+                object result = DatabaseManager.ExecuteScalar(query, parameters);
+                decimal dbPrice = result != null ? Convert.ToDecimal(result) : itemPrice;
+
+                // Add a new row to the basket
+                int rowIndex = basketGridView.Rows.Add();
+                DataGridViewRow row = basketGridView.Rows[rowIndex];
+
+                // Set the values for the new row
+                row.Cells["dgvName"].Value = itemName;
+                row.Cells["dgvOriginalPrice"].Value = dbPrice; // Use price from database
+                row.Cells["dgvPrice"].Value = dbPrice; // Initial price is the same as original
+                row.Cells["dgvQty"].Value = 1;
+                row.Cells["dgvExtraChargeValue"].Value = 0; // Initialize extra charge to 0
+
+                // Organize items by category if using that feature
+                string category = "General"; // Default category
+                if (!basketItemsByCategory.ContainsKey(category))
+                    basketItemsByCategory[category] = new List<DataGridViewRow>();
+                basketItemsByCategory[category].Add(row);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error adding item to basket: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
 
@@ -787,24 +802,20 @@ namespace OrderManagement.Model
                     // Just decrement the quantity by 1
                     row.Cells["dgvQty"].Value = quantity - 1;
 
-                    // Recalculate the price based on original price and quantity
-                    decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
-                    decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
-                        Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
+                    // Do NOT recalculate the price - leave dgvPrice unchanged
 
-                    row.Cells["dgvPrice"].Value = (originalPrice * (quantity - 1)) + extraCharge;
+                    // Mark as unsaved since we modified the basket
+                    isOrderSaved = false;
                 }
                 else
                 {
                     // If quantity is 1, remove the row from the basket
                     basketGridView.Rows.RemoveAt(e.RowIndex);
+                    isOrderSaved = false;
                 }
 
                 // Update the total price label
                 UpdateTotalPriceLabel();
-
-                // Mark as unsaved since we modified the basket
-                isOrderSaved = false;
             }
 
             // Handle Extra Charge button
@@ -824,17 +835,12 @@ namespace OrderManagement.Model
                         // Get the new extra charge from the popup
                         decimal newExtra = popup.GetSelectedAmount();
 
-                        // Get the original price and quantity
-                        decimal originalPrice = 0;
-                        decimal.TryParse(row.Cells["dgvOriginalPrice"].Value?.ToString(), out originalPrice);
-                        int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-
                         // Store the new extra charge value
                         row.Cells["dgvExtraChargeValue"].Value = newExtra;
 
-                        // Calculate the new total price for this row: (original price * quantity) + extra charge
-                        decimal newTotalPrice = (originalPrice * quantity) + newExtra;
-                        row.Cells["dgvPrice"].Value = newTotalPrice;
+                        // Update the price with the extra charge
+                        decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
+                        row.Cells["dgvPrice"].Value = originalPrice + newExtra;
 
                         // Update the total price
                         UpdateTotalPriceLabel();
@@ -845,6 +851,10 @@ namespace OrderManagement.Model
                 }
             }
         }
+
+
+
+
 
 
 
@@ -1299,16 +1309,20 @@ namespace OrderManagement.Model
                     if (row.Cells["dgvName"].Value == null) continue;
 
                     string itemName = row.Cells["dgvName"].Value.ToString();
-                    decimal itemPrice = Convert.ToDecimal(row.Cells["dgvPrice"].Value);
+                    decimal itemPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
                     int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
+                    decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
+                        Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
 
-                    int result = MainClass.SaveOrderItem(orderId, itemName, itemPrice, quantity);
+                    int result = MainClass.SaveOrderItem(orderId, itemName, itemPrice, quantity, extraCharge);
                     if (result == -1)
                     {
                         allItemsSaved = false;
                         MessageBox.Show($"Failed to save item: {itemName}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
+
+
 
                 if (allItemsSaved)
                 {
@@ -1920,7 +1934,6 @@ namespace OrderManagement.Model
 
 
         // Helper method to add an item to the basket
-        // Helper method to add an item to the basket
         private void AddItemToBasket(string itemName, decimal itemPrice)
         {
             // Check if the item already exists in the basket
@@ -1933,7 +1946,7 @@ namespace OrderManagement.Model
                 int currentQty = Convert.ToInt32(row.Cells["dgvQty"].Value) + 1;
                 row.Cells["dgvQty"].Value = currentQty;
 
-                // No need to recalculate price - dgvPrice stays the same
+                // Do NOT update the price - leave dgvPrice unchanged
             }
             else
             {
@@ -1947,6 +1960,8 @@ namespace OrderManagement.Model
             // Set isOrderSaved to false as the basket has changed
             isOrderSaved = false;
         }
+
+
 
 
 
@@ -2492,15 +2507,27 @@ namespace OrderManagement.Model
                             if (row.Cells["dgvName"].Value == null) continue;
 
                             string itemName = row.Cells["dgvName"].Value.ToString().PadRight(20);
-                            string itemPrice = row.Cells["dgvPrice"].Value.ToString();
+                            decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
+                            decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
+                                Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
                             int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
+                            decimal totalItemPrice = Convert.ToDecimal(row.Cells["dgvPrice"].Value);
 
                             ev.Graphics.DrawString(quantity.ToString() + " x " + itemName, font, Brushes.Black, margin, currentHeight);
-                            float itemPriceWidth = ev.Graphics.MeasureString("£" + itemPrice, font).Width;
-                            ev.Graphics.DrawString("£" + itemPrice, font, Brushes.Black, pageWidth - margin - itemPriceWidth, currentHeight);
-
+                            float itemPriceWidth = ev.Graphics.MeasureString("£" + totalItemPrice.ToString("F2"), font).Width;
+                            ev.Graphics.DrawString("£" + totalItemPrice.ToString("F2"), font, Brushes.Black, pageWidth - margin - itemPriceWidth, currentHeight);
                             currentHeight += 20;
+
+                            // Show extra charge if any
+                            if (extraCharge > 0)
+                            {
+                                ev.Graphics.DrawString("   + Extra Charge", font, Brushes.Black, margin + 10, currentHeight);
+                                float extraChargeWidth = ev.Graphics.MeasureString("£" + extraCharge.ToString("F2"), font).Width;
+                                ev.Graphics.DrawString("£" + extraCharge.ToString("F2"), font, Brushes.Black, pageWidth - margin - extraChargeWidth, currentHeight);
+                                currentHeight += 20;
+                            }
                         }
+
 
                         // Total
                         string totalLabel = "Total".PadRight(10);
