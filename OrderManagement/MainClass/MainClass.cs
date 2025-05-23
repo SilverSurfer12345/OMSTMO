@@ -11,8 +11,6 @@ namespace OrderManagement
 {
     class MainClass
     {
-        // Remove the hardcoded conString and use DatabaseManager.ConnectionString everywhere
-
         public static void CloseAllDatabaseConnections()
         {
             DatabaseManager.CloseConnections();
@@ -656,9 +654,9 @@ namespace OrderManagement
             {
                 string checkOrderQuery = "SELECT COUNT(*) FROM Orders WHERE OrderId = @OrderId";
                 Dictionary<string, object> checkOrderParams = new Dictionary<string, object>
-        {
-            { "@OrderId", orderId }
-        };
+                {
+                    { "@OrderId", orderId }
+                };
 
                 int orderCount = Convert.ToInt32(DatabaseManager.ExecuteScalar(checkOrderQuery, checkOrderParams));
                 if (orderCount == 0)
