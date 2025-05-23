@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPOS));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnAutoAdd = new System.Windows.Forms.Button();
             this.lblSearchFoodItem = new System.Windows.Forms.Label();
             this.txtSearchFoodItem = new System.Windows.Forms.TextBox();
             this.btnWaiting = new System.Windows.Forms.Button();
@@ -68,7 +69,7 @@
             this.btnPayment = new System.Windows.Forms.Button();
             this.btnSaveOrder = new System.Windows.Forms.Button();
             this.pnlPrice = new System.Windows.Forms.Panel();
-            this.btnAutoAdd = new System.Windows.Forms.Button();
+            this.txtAddNote = new System.Windows.Forms.TextBox();
             this.btnDeliveryChargeAmend = new System.Windows.Forms.Button();
             this.txtDeliveryCharge = new System.Windows.Forms.TextBox();
             this.txtTotalPrice = new System.Windows.Forms.TextBox();
@@ -95,6 +96,7 @@
             this.rmDataSet1 = new OrderManagement.RMDataSet();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn3 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.lblAddNote = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlCstDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnExit)).BeginInit();
@@ -136,6 +138,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1828, 192);
             this.panel1.TabIndex = 0;
+            // 
+            // btnAutoAdd
+            // 
+            this.btnAutoAdd.Location = new System.Drawing.Point(215, 12);
+            this.btnAutoAdd.Name = "btnAutoAdd";
+            this.btnAutoAdd.Size = new System.Drawing.Size(72, 53);
+            this.btnAutoAdd.TabIndex = 59;
+            this.btnAutoAdd.Text = "Auto Add";
+            this.btnAutoAdd.UseVisualStyleBackColor = true;
+            this.btnAutoAdd.Click += new System.EventHandler(this.btnAutoAdd_Click);
             // 
             // lblSearchFoodItem
             // 
@@ -537,33 +549,34 @@
             // 
             // pnlPrice
             // 
+            this.pnlPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlPrice.Controls.Add(this.lblAddNote);
+            this.pnlPrice.Controls.Add(this.txtAddNote);
             this.pnlPrice.Controls.Add(this.btnDeliveryChargeAmend);
             this.pnlPrice.Controls.Add(this.txtDeliveryCharge);
             this.pnlPrice.Controls.Add(this.lblPaymentOption);
             this.pnlPrice.Controls.Add(this.txtTotalPrice);
             this.pnlPrice.Controls.Add(this.lblTotalPrice);
             this.pnlPrice.Controls.Add(this.cbCustomDiscount);
-            this.pnlPrice.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlPrice.Location = new System.Drawing.Point(1378, 0);
+            this.pnlPrice.Location = new System.Drawing.Point(1402, 30);
             this.pnlPrice.Name = "pnlPrice";
-            this.pnlPrice.Size = new System.Drawing.Size(450, 155);
+            this.pnlPrice.Size = new System.Drawing.Size(426, 125);
             this.pnlPrice.TabIndex = 37;
             // 
-            // btnAutoAdd
+            // txtAddNote
             // 
-            this.btnAutoAdd.Location = new System.Drawing.Point(215, 12);
-            this.btnAutoAdd.Name = "btnAutoAdd";
-            this.btnAutoAdd.Size = new System.Drawing.Size(72, 53);
-            this.btnAutoAdd.TabIndex = 59;
-            this.btnAutoAdd.Text = "Auto Add";
-            this.btnAutoAdd.UseVisualStyleBackColor = true;
-            this.btnAutoAdd.Click += new System.EventHandler(this.btnAutoAdd_Click);
+            this.txtAddNote.Location = new System.Drawing.Point(102, 6);
+            this.txtAddNote.Name = "txtAddNote";
+            this.txtAddNote.Size = new System.Drawing.Size(133, 25);
+            this.txtAddNote.TabIndex = 59;
             // 
             // btnDeliveryChargeAmend
             // 
-            this.btnDeliveryChargeAmend.Location = new System.Drawing.Point(272, 40);
+            this.btnDeliveryChargeAmend.Location = new System.Drawing.Point(241, 0);
             this.btnDeliveryChargeAmend.Name = "btnDeliveryChargeAmend";
-            this.btnDeliveryChargeAmend.Size = new System.Drawing.Size(91, 25);
+            this.btnDeliveryChargeAmend.Size = new System.Drawing.Size(91, 34);
             this.btnDeliveryChargeAmend.TabIndex = 58;
             this.btnDeliveryChargeAmend.Text = "Del Amend";
             this.btnDeliveryChargeAmend.UseVisualStyleBackColor = true;
@@ -571,7 +584,7 @@
             // 
             // txtDeliveryCharge
             // 
-            this.txtDeliveryCharge.Location = new System.Drawing.Point(369, 40);
+            this.txtDeliveryCharge.Location = new System.Drawing.Point(338, 6);
             this.txtDeliveryCharge.Name = "txtDeliveryCharge";
             this.txtDeliveryCharge.Size = new System.Drawing.Size(81, 25);
             this.txtDeliveryCharge.TabIndex = 57;
@@ -582,7 +595,7 @@
             this.txtTotalPrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTotalPrice.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTotalPrice.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalPrice.Location = new System.Drawing.Point(343, 121);
+            this.txtTotalPrice.Location = new System.Drawing.Point(319, 92);
             this.txtTotalPrice.Name = "txtTotalPrice";
             this.txtTotalPrice.Size = new System.Drawing.Size(100, 26);
             this.txtTotalPrice.TabIndex = 14;
@@ -596,7 +609,7 @@
             this.lblTotalPrice.BackColor = System.Drawing.Color.Transparent;
             this.lblTotalPrice.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTotalPrice.ForeColor = System.Drawing.Color.White;
-            this.lblTotalPrice.Location = new System.Drawing.Point(228, 121);
+            this.lblTotalPrice.Location = new System.Drawing.Point(204, 91);
             this.lblTotalPrice.Name = "lblTotalPrice";
             this.lblTotalPrice.Size = new System.Drawing.Size(109, 25);
             this.lblTotalPrice.TabIndex = 10;
@@ -622,7 +635,7 @@
             "80% Discount",
             "90% Discount",
             "100% Discount"});
-            this.cbCustomDiscount.Location = new System.Drawing.Point(77, 121);
+            this.cbCustomDiscount.Location = new System.Drawing.Point(53, 91);
             this.cbCustomDiscount.Name = "cbCustomDiscount";
             this.cbCustomDiscount.Size = new System.Drawing.Size(145, 25);
             this.cbCustomDiscount.TabIndex = 13;
@@ -646,14 +659,14 @@
             this.basketGridView.AllowUserToDeleteRows = false;
             this.basketGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.basketGridView.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(234)))), ((int)(((byte)(237)))));
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.basketGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(234)))), ((int)(((byte)(237)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.basketGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.basketGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.basketGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dgvid,
@@ -666,14 +679,14 @@
             this.dgvDeliveryCharge,
             this.dgvDeleteBasketItem,
             this.dgvExtraChargeValue});
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(241)))), ((int)(((byte)(243)))));
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.basketGridView.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(241)))), ((int)(((byte)(243)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(69)))), ((int)(((byte)(94)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.basketGridView.DefaultCellStyle = dataGridViewCellStyle6;
             this.basketGridView.Dock = System.Windows.Forms.DockStyle.Top;
             this.basketGridView.Location = new System.Drawing.Point(0, 0);
             this.basketGridView.Name = "basketGridView";
@@ -757,13 +770,13 @@
             // dgvDeleteBasketItem
             // 
             this.dgvDeleteBasketItem.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.Color.Red;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvDeleteBasketItem.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Red;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvDeleteBasketItem.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvDeleteBasketItem.FillWeight = 50F;
             this.dgvDeleteBasketItem.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.dgvDeleteBasketItem.HeaderText = "";
@@ -871,6 +884,17 @@
             this.dataGridViewImageColumn3.MinimumWidth = 50;
             this.dataGridViewImageColumn3.Name = "dataGridViewImageColumn3";
             // 
+            // lblAddNote
+            // 
+            this.lblAddNote.AutoSize = true;
+            this.lblAddNote.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddNote.ForeColor = System.Drawing.Color.White;
+            this.lblAddNote.Location = new System.Drawing.Point(3, 6);
+            this.lblAddNote.Name = "lblAddNote";
+            this.lblAddNote.Size = new System.Drawing.Size(103, 25);
+            this.lblAddNote.TabIndex = 60;
+            this.lblAddNote.Text = "Add Note:";
+            // 
             // frmPOS
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -971,5 +995,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvDeliveryCharge;
         private System.Windows.Forms.DataGridViewButtonColumn dgvDeleteBasketItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn dgvExtraChargeValue;
+        private System.Windows.Forms.TextBox txtAddNote;
+        private System.Windows.Forms.Label lblAddNote;
     }
 }

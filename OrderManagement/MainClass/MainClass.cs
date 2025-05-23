@@ -559,7 +559,9 @@ namespace OrderManagement
             SQL(updateQuantityQuery, parameters);
         }
 
-        public static int SaveOrder(int customerId, string orderType, decimal totalPrice, DateTime currentTime, string paymentType, string address, decimal deliveryCharge, decimal presetCharges)
+        public static int SaveOrder(
+     int customerId, string orderType, decimal totalPrice, DateTime currentTime, string paymentType,
+     string address, decimal deliveryCharge, decimal presetCharges, decimal discountRate, string discountLabel)
         {
             SqlConnection con = null;
             SqlTransaction transaction = null;
@@ -583,9 +585,9 @@ namespace OrderManagement
 
                 string sql = @"
         INSERT INTO Orders 
-            (CustomerId, OrderType, TotalPrice, OrderDate, PaymentType, Address, completion, DesiredCompletionTime, DeliveryCharge, PresetCharges) 
+            (CustomerId, OrderType, TotalPrice, OrderDate, PaymentType, Address, completion, DesiredCompletionTime, DeliveryCharge, PresetCharges, DiscountRate, DiscountLabel) 
         VALUES 
-            (@CustomerId, @OrderType, @TotalPrice, @OrderDate, @PaymentType, @Address, 'no', @DesiredCompletionTime, @DeliveryCharge, @PresetCharges);
+            (@CustomerId, @OrderType, @TotalPrice, @OrderDate, @PaymentType, @Address, 'no', @DesiredCompletionTime, @DeliveryCharge, @PresetCharges, @DiscountRate, @DiscountLabel);
         SELECT SCOPE_IDENTITY();";
 
                 con = new SqlConnection(DatabaseManager.ConnectionString);
@@ -603,6 +605,8 @@ namespace OrderManagement
                     cmd.Parameters.Add("@DesiredCompletionTime", SqlDbType.Time).Value = desiredCompletionTime;
                     cmd.Parameters.Add("@DeliveryCharge", SqlDbType.Decimal).Value = deliveryCharge;
                     cmd.Parameters.Add("@PresetCharges", SqlDbType.Decimal).Value = presetCharges;
+                    cmd.Parameters.Add("@DiscountRate", SqlDbType.Decimal).Value = discountRate;
+                    cmd.Parameters.Add("@DiscountLabel", SqlDbType.NVarChar, 50).Value = discountLabel ?? (object)DBNull.Value;
 
                     var result = cmd.ExecuteScalar();
                     int orderId = result == null ? -1 : Convert.ToInt32(result);

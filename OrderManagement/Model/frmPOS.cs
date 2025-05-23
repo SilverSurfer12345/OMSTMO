@@ -1313,27 +1313,31 @@ namespace OrderManagement.Model
 
                     // Update existing order
                     string updateOrderQuery = @"
-        UPDATE Orders 
-        SET 
-            CustomerId = @CustomerId, 
-            OrderType = @OrderType, 
-            TotalPrice = @TotalPrice, 
-            PaymentType = @PaymentType, 
-            Address = @Address,
-            DeliveryCharge = @DeliveryCharge
-        WHERE 
-            OrderId = @OrderId";
+    UPDATE Orders 
+    SET 
+        CustomerId = @CustomerId, 
+        OrderType = @OrderType, 
+        TotalPrice = @TotalPrice, 
+        PaymentType = @PaymentType, 
+        Address = @Address,
+        DeliveryCharge = @DeliveryCharge,
+        DiscountRate = @DiscountRate,
+        DiscountLabel = @DiscountLabel
+    WHERE 
+        OrderId = @OrderId";
 
                     Dictionary<string, object> updateOrderParams = new Dictionary<string, object>
     {
-        { "@CustomerId", customerId },
-        { "@OrderType", orderType },
-        { "@TotalPrice", totalPrice },
-        { "@PaymentType", paymentType },
-        { "@Address", lblAddressDisplay.Text },
-        { "@DeliveryCharge", deliveryCharge },
-        { "@OrderId", editOrderId }
-    };
+                         { "@CustomerId", customerId },
+                         { "@OrderType", orderType },
+                         { "@TotalPrice", totalPrice },
+                         { "@PaymentType", paymentType },
+                         { "@Address", lblAddressDisplay.Text },
+                         { "@DeliveryCharge", deliveryCharge },
+                         { "@OrderId", editOrderId },
+                        { "@DiscountRate", discountRate },
+                        { "@DiscountLabel", cbCustomDiscount.SelectedItem?.ToString() ?? "No Discount" }
+};
 
                     int result = DatabaseManager.ExecuteNonQuery(updateOrderQuery, updateOrderParams);
 
@@ -1348,9 +1352,9 @@ namespace OrderManagement.Model
                     // Delete existing order items
                     string deleteItemsQuery = "DELETE FROM OrderItems WHERE OrderId = @OrderId";
                     Dictionary<string, object> deleteItemsParams = new Dictionary<string, object>
-            {
-                { "@OrderId", orderId }
-            };
+                  {
+                       { "@OrderId", orderId }
+                     };
 
                     DatabaseManager.ExecuteNonQuery(deleteItemsQuery, deleteItemsParams);
                 }
@@ -1360,7 +1364,10 @@ namespace OrderManagement.Model
                     // Parse the delivery charge from the textbox
                     decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
-                    orderId = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
+                    orderId = MainClass.SaveOrder(
+                        customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text,
+                        deliveryCharge, presetCharges, discountRate, cbCustomDiscount.SelectedItem?.ToString() ?? "No Discount"
+                    );
 
                     if (orderId == -1)
                     {
@@ -2149,7 +2156,10 @@ namespace OrderManagement.Model
                     // Parse the delivery charge from the textbox
                     decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
                     decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
-                    orderIdValue = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
+                    orderIdValue = MainClass.SaveOrder(
+                        customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text,
+                        deliveryCharge, presetCharges, discountRate, cbCustomDiscount.SelectedItem?.ToString() ?? "No Discount"
+                    );
                     if (orderIdValue == -1)
                     {
                         MessageBox.Show("Failed to save order. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
