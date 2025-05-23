@@ -744,17 +744,13 @@ namespace OrderManagement.Model
 
         private void txtSearchFoodItem_TextChanged(object sender, EventArgs e)
         {
-            // Implement your search/filter logic here.
-            // For example:
             string searchText = txtSearchFoodItem.Text.Trim();
-
-            // Clear the item view panel
             flpItemView.Controls.Clear();
 
             if (!string.IsNullOrEmpty(searchText))
             {
                 // Query your food items by search text
-                string query = "SELECT Item, price FROM foodItems WHERE Item LIKE @searchText";
+                string query = "SELECT Item, price, icon FROM foodItems WHERE Item LIKE @searchText";
                 var parameters = new Dictionary<string, object>
         {
             { "@searchText", "%" + searchText + "%" }
@@ -767,12 +763,31 @@ namespace OrderManagement.Model
                     {
                         string itemName = row["Item"].ToString();
                         decimal itemPrice = Convert.ToDecimal(row["price"]);
-                        Button btn = CreateFoodItemButton(itemName, itemPrice, (s, args) =>
+                        byte[] imageData = null;
+
+                        if (row.Table.Columns.Contains("icon") && row["icon"] != DBNull.Value)
+                        {
+                            imageData = (byte[])row["icon"];
+                        }
+
+                        Button btn = CreateFoodItemButton(itemName, itemPrice, imageData, (s, args) =>
                         {
                             dynamic tag = ((Button)s).Tag;
                             AddItemToBasket(tag.ItemName, tag.ItemPrice);
-                            txtSearchFoodItem.Text = ""; // Optionally clear search after selection
+                            txtSearchFoodItem.Text = ""; // Clear search after selection
+
+                            // Reload the first category after selection
+                            if (flpCategoryBtns != null && flpCategoryBtns.Controls.Count > 0)
+                            {
+                                var firstCategoryBtn = flpCategoryBtns.Controls[0] as Button;
+                                if (firstCategoryBtn != null && firstCategoryBtn.Tag != null)
+                                {
+                                    string firstCategory = firstCategoryBtn.Tag.ToString();
+                                    LoadItemsByCategory(firstCategory);
+                                }
+                            }
                         });
+
                         flpItemView.Controls.Add(btn);
                     }
                 }
@@ -2263,399 +2278,192 @@ namespace OrderManagement.Model
 
         private void btnKot_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(currentOrderType))
-            {
-                MessageBox.Show("Please select either collection or delivery from the top button panel");
-                return;
-            }
-
-            if (basketGridView.Rows.Count == 0)
-            {
-                MessageBox.Show("The basket is empty.");
-                return;
-            }
+            // 1. Save the order using the same logic as btnSaveOrder_Click
             try
             {
-                // First, save the order (similar to btnSaveOrder_Click)
-                int customerId;
+                // Reuse the save logic
+                btnSaveOrder_Click(sender, e);
 
-                // Check if we already have a customer selected
-                if (customerExists && id > 0)
+                // Only proceed if the order was saved successfully
+                if (!isOrderSaved)
                 {
-                    customerId = id;
-                }
-                else
-                {
-                    // Parse customer name
-                    string customerName = txtCustomerDetails.Text.Trim();
-                    string forename = customerName;
-                    string surname = "";
-
-                    if (customerName.Contains(" "))
-                    {
-                        string[] nameParts = customerName.Split(new[] { ' ' }, 2);
-                        forename = nameParts[0];
-                        surname = nameParts[1];
-                    }
-
-                    // Check if customer exists by phone number
-                    if (!string.IsNullOrEmpty(txtCstTelephone.Text))
-                    {
-                        string query = "SELECT Id FROM customers WHERE telephoneNo = @telephoneNo";
-                        Dictionary<string, object> parameters = new Dictionary<string, object>
-                {
-                    { "@telephoneNo", txtCstTelephone.Text.Trim() }
-                };
-
-                        DataTable dt = MainClass.getDataFromTable(query, parameters);
-                        if (dt != null && dt.Rows.Count > 0)
-                        {
-                            customerId = Convert.ToInt32(dt.Rows[0]["Id"]);
-                        }
-                        else
-                        {
-                            // Create new customer
-                            customerId = MainClass.CreateCustomer(
-                                forename,
-                                surname,
-                                txtCstTelephone.Text.Trim(),
-                                lblAddressDisplay.Text.Trim()
-                            );
-                        }
-                    }
-                    else if (!string.IsNullOrEmpty(customerName))
-                    {
-                        // Create customer with just name
-                        customerId = MainClass.CreateCustomer(
-                            forename,
-                            surname,
-                            null,
-                            lblAddressDisplay.Text.Trim()
-                        );
-                    }
-                    else
-                    {
-                        // Create a guest customer
-                        customerId = MainClass.CreateCustomer(
-                            "Guest",
-                            "Customer",
-                            null,
-                            null
-                        );
-                    }
-                }
-
-                if (customerId <= 0)
-                {
-                    MessageBox.Show("Failed to create or find customer. Please check customer details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Order was not saved. Printing is cancelled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Get order details
-                DateTime currentTime = DateTime.Now;
+                // 2. Now print the order (existing print logic)
+                PrintDocument pd = new PrintDocument();
+                pd.DefaultPageSettings.PaperSize = new PaperSize("Thermal44", 44 * 10, 1000);
 
-                // CHANGE HERE: Always use CalculateTotal() to ensure accurate pricing
-                decimal totalPrice = CalculateTotal();
-
-                string orderType = currentOrderType; // Use the current order type
-                if (string.IsNullOrEmpty(orderType))
+                pd.PrintPage += (s, ev) =>
                 {
-                    orderType = "COLLECTION"; // Default to collection if not set
-                }
+                    const int margin = 5;
+                    int pageWidth = ev.PageBounds.Width - margin * 2;
 
-                string paymentType = lblPaymentOption.Text;
-                if (string.IsNullOrEmpty(paymentType))
-                {
-                    paymentType = "PENDING"; // Default payment status
-                }
+                    Font font = new Font("Arial", 10);
+                    Font titleFont = new Font("Arial", 12, FontStyle.Bold);
+                    Font resFont = new Font("Arial", 8);
+                    Font resTelFont = new Font("Arial", 8, FontStyle.Bold);
+                    Font cusFont = new Font("Arial", 10);
+                    Font cusBoldFont = new Font("Arial", 10, FontStyle.Bold);
 
-                int orderId;
+                    float currentHeight = margin;
 
-                if (isEditMode && editOrderId > 0)
-                {
-                    // Parse the delivery charge
-                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
+                    // Title
+                    string title = "TAKE MY ORDER";
+                    int titleWidth = (int)ev.Graphics.MeasureString(title, titleFont).Width;
+                    ev.Graphics.DrawString(title, titleFont, Brushes.Black, (pageWidth - titleWidth) / 2, currentHeight);
+                    currentHeight += 20;
 
-                    // Update existing order
-                    string updateOrderQuery = @"
-        UPDATE Orders 
-        SET 
-            CustomerId = @CustomerId, 
-            OrderType = @OrderType, 
-            TotalPrice = @TotalPrice, 
-            PaymentType = @PaymentType, 
-            Address = @Address,
-            DeliveryCharge = @DeliveryCharge
-        WHERE 
-            OrderId = @OrderId";
+                    // Restaurant Details
+                    string resAddress = "123 Restaurant Street, Newcastle Upon Tyne, NE99 9AA";
+                    SizeF resAddressSize = ev.Graphics.MeasureString(resAddress, resFont);
+                    float resAddressX = (pageWidth - resAddressSize.Width) / 2;
+                    ev.Graphics.DrawString(resAddress, resFont, Brushes.Black, resAddressX, currentHeight);
+                    currentHeight += resAddressSize.Height;
 
-                    Dictionary<string, object> updateOrderParams = new Dictionary<string, object>
-    {
-        { "@CustomerId", customerId },
-        { "@OrderType", orderType },
-        { "@TotalPrice", totalPrice },
-        { "@PaymentType", paymentType },
-        { "@Address", lblAddressDisplay.Text },
-        { "@DeliveryCharge", deliveryCharge },
-        { "@OrderId", editOrderId }
-    };
+                    string resTelephone = "01910000000";
+                    SizeF resTelephoneSize = ev.Graphics.MeasureString(resTelephone, resFont);
+                    float resTelephoneX = (pageWidth - resTelephoneSize.Width) / 2;
+                    ev.Graphics.DrawString(resTelephone, resTelFont, Brushes.Black, resTelephoneX, currentHeight);
+                    currentHeight += resTelephoneSize.Height;
 
-                    int result = DatabaseManager.ExecuteNonQuery(updateOrderQuery, updateOrderParams);
+                    // Draw the first line to split the page
+                    ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
+                    currentHeight += 10;
 
-                    if (result <= 0)
+                    // Order Type
+                    string orderTypeDisplay = currentOrderType?.ToUpperInvariant() ?? "ORDER";
+                    Font orderTypeFont = new Font("Arial", 12, FontStyle.Bold);
+                    SizeF orderTypeSize = ev.Graphics.MeasureString(orderTypeDisplay, orderTypeFont);
+                    float orderTypeX = (pageWidth - orderTypeSize.Width) / 2;
+                    ev.Graphics.DrawString(orderTypeDisplay, orderTypeFont, Brushes.Black, orderTypeX, currentHeight);
+                    currentHeight += orderTypeSize.Height + 5; // Add some spacing
+
+                    // Customer Details - only print if available
+                    bool hasCustomerName = !string.IsNullOrEmpty(customerForename) || !string.IsNullOrEmpty(customerSurname);
+                    if (hasCustomerName)
                     {
-                        MessageBox.Show("Failed to update order. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        string cusName = $"{customerForename} {customerSurname}".Trim();
+                        ev.Graphics.DrawString(cusName, cusBoldFont, Brushes.Black, margin, currentHeight);
+                        currentHeight += ev.Graphics.MeasureString(cusName, cusBoldFont).Height;
                     }
 
-                    orderId = editOrderId;
-
-                    // Delete existing order items
-                    string deleteItemsQuery = "DELETE FROM OrderItems WHERE OrderId = @OrderId";
-                    Dictionary<string, object> deleteItemsParams = new Dictionary<string, object>
-            {
-                { "@OrderId", orderId }
-            };
-
-                    DatabaseManager.ExecuteNonQuery(deleteItemsQuery, deleteItemsParams);
-                }
-                else
-                {
-                    // Save new order
-                    decimal deliveryCharge = OrderManagement.Model.DeliveryChargeManager.GetDeliveryCharge(this);
-                    decimal presetCharges = OrderManagement.View.frmPresetCharges.GetTotalPresetCharges();
-                    orderId = MainClass.SaveOrder(customerId, orderType, totalPrice, currentTime, paymentType, lblAddressDisplay.Text, deliveryCharge, presetCharges);
-                    if (orderId == -1)
+                    // Only print address for delivery orders and if address is available
+                    if (currentOrderType.Equals("delivery", StringComparison.OrdinalIgnoreCase))
                     {
-                        MessageBox.Show("Failed to save order. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        StringBuilder addressBuilder = new StringBuilder();
+
+                        if (!string.IsNullOrEmpty(customerHouseNameNumber))
+                            addressBuilder.AppendLine(customerHouseNameNumber);
+
+                        if (!string.IsNullOrEmpty(customerAddressLine1))
+                            addressBuilder.AppendLine(customerAddressLine1);
+
+                        if (!string.IsNullOrEmpty(customerAddressLine2))
+                            addressBuilder.AppendLine(customerAddressLine2);
+
+                        if (!string.IsNullOrEmpty(customerAddressLine3))
+                            addressBuilder.AppendLine(customerAddressLine3);
+
+                        if (!string.IsNullOrEmpty(customerAddressLine4))
+                            addressBuilder.AppendLine(customerAddressLine4);
+
+                        if (!string.IsNullOrEmpty(customerPostcode))
+                            addressBuilder.Append(customerPostcode);
+
+                        string cusAddress = addressBuilder.ToString().Trim();
+
+                        if (!string.IsNullOrEmpty(cusAddress))
+                        {
+                            ev.Graphics.DrawString(cusAddress, cusFont, Brushes.Black, margin, currentHeight);
+                            currentHeight += ev.Graphics.MeasureString(cusAddress, cusFont).Height;
+                        }
                     }
-                }
 
-                // Save each item in the basket
-                bool allItemsSaved = true;
-                foreach (DataGridViewRow row in basketGridView.Rows)
-                {
-                    if (row.Cells["dgvName"].Value == null) continue;
-
-                    string itemName = row.Cells["dgvName"].Value.ToString();
-                    decimal itemPrice = Convert.ToDecimal(row.Cells["dgvPrice"].Value);
-                    int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-
-                    int result = MainClass.SaveOrderItem(orderId, itemName, itemPrice, quantity);
-                    if (result == -1)
+                    // Customer Telephone Number - only print if available
+                    if (!string.IsNullOrEmpty(customerTelephoneNo))
                     {
-                        allItemsSaved = false;
-                        MessageBox.Show($"Failed to save item: {itemName}", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ev.Graphics.DrawString(customerTelephoneNo, cusBoldFont, Brushes.Black, margin, currentHeight);
+                        currentHeight += ev.Graphics.MeasureString(customerTelephoneNo, cusBoldFont).Height;
                     }
-                }
 
-                if (allItemsSaved)
-                {
-                    // Now print the order
-                    PrintDocument pd = new PrintDocument();
-                    pd.DefaultPageSettings.PaperSize = new PaperSize("Thermal44", 44 * 10, 1000);
+                    // Draw the second line to split the page
+                    ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
+                    currentHeight += 10;
 
-                    pd.PrintPage += (s, ev) =>
+                    // Items
+                    foreach (DataGridViewRow row in basketGridView.Rows)
                     {
-                        const int margin = 5;
-                        int pageWidth = ev.PageBounds.Width - margin * 2;
+                        if (row.Cells["dgvName"].Value == null) continue;
 
-                        Font font = new Font("Arial", 10);
-                        Font titleFont = new Font("Arial", 12, FontStyle.Bold);
-                        Font resFont = new Font("Arial", 8);
-                        Font resTelFont = new Font("Arial", 8, FontStyle.Bold);
-                        Font cusFont = new Font("Arial", 10);
-                        Font cusBoldFont = new Font("Arial", 10, FontStyle.Bold);
+                        string itemName = row.Cells["dgvName"].Value.ToString().PadRight(20);
+                        decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
+                        decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
+                            Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
+                        int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
+                        decimal totalItemPrice = Convert.ToDecimal(row.Cells["dgvPrice"].Value);
 
-                        float currentHeight = margin;
-
-                        // Title
-                        string title = "TAKE MY ORDER";
-                        int titleWidth = (int)ev.Graphics.MeasureString(title, titleFont).Width;
-                        ev.Graphics.DrawString(title, titleFont, Brushes.Black, (pageWidth - titleWidth) / 2, currentHeight);
+                        ev.Graphics.DrawString(quantity.ToString() + " x " + itemName, font, Brushes.Black, margin, currentHeight);
+                        float itemPriceWidth = ev.Graphics.MeasureString("£" + totalItemPrice.ToString("F2"), font).Width;
+                        ev.Graphics.DrawString("£" + totalItemPrice.ToString("F2"), font, Brushes.Black, pageWidth - margin - itemPriceWidth, currentHeight);
                         currentHeight += 20;
 
-                        // Restaurant Details
-                        string resAddress = "123 Restaurant Street, Newcastle Upon Tyne, NE99 9AA";
-                        SizeF resAddressSize = ev.Graphics.MeasureString(resAddress, resFont);
-                        float resAddressX = (pageWidth - resAddressSize.Width) / 2;
-                        ev.Graphics.DrawString(resAddress, resFont, Brushes.Black, resAddressX, currentHeight);
-                        currentHeight += resAddressSize.Height;
-
-                        string resTelephone = "01910000000";
-                        SizeF resTelephoneSize = ev.Graphics.MeasureString(resTelephone, resFont);
-                        float resTelephoneX = (pageWidth - resTelephoneSize.Width) / 2;
-                        ev.Graphics.DrawString(resTelephone, resTelFont, Brushes.Black, resTelephoneX, currentHeight);
-                        currentHeight += resTelephoneSize.Height;
-
-                        // Draw the first line to split the page
-                        ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
-                        currentHeight += 10;
-
-                        // Order Type
-                        string orderTypeDisplay = currentOrderType?.ToUpperInvariant() ?? "ORDER";
-                        Font orderTypeFont = new Font("Arial", 12, FontStyle.Bold);
-                        SizeF orderTypeSize = ev.Graphics.MeasureString(orderTypeDisplay, orderTypeFont);
-                        float orderTypeX = (pageWidth - orderTypeSize.Width) / 2;
-                        ev.Graphics.DrawString(orderTypeDisplay, orderTypeFont, Brushes.Black, orderTypeX, currentHeight);
-                        currentHeight += orderTypeSize.Height + 5; // Add some spacing
-
-                        // Customer Details - only print if available
-                        bool hasCustomerName = !string.IsNullOrEmpty(customerForename) || !string.IsNullOrEmpty(customerSurname);
-                        if (hasCustomerName)
+                        // Show extra charge if any
+                        if (extraCharge > 0)
                         {
-                            string cusName = $"{customerForename} {customerSurname}".Trim();
-                            ev.Graphics.DrawString(cusName, cusBoldFont, Brushes.Black, margin, currentHeight);
-                            currentHeight += ev.Graphics.MeasureString(cusName, cusBoldFont).Height;
-                        }
-
-                        // Only print address for delivery orders and if address is available
-                        if (currentOrderType.Equals("delivery", StringComparison.OrdinalIgnoreCase))
-                        {
-                            StringBuilder addressBuilder = new StringBuilder();
-
-                            if (!string.IsNullOrEmpty(customerHouseNameNumber))
-                                addressBuilder.AppendLine(customerHouseNameNumber);
-
-                            if (!string.IsNullOrEmpty(customerAddressLine1))
-                                addressBuilder.AppendLine(customerAddressLine1);
-
-                            if (!string.IsNullOrEmpty(customerAddressLine2))
-                                addressBuilder.AppendLine(customerAddressLine2);
-
-                            if (!string.IsNullOrEmpty(customerAddressLine3))
-                                addressBuilder.AppendLine(customerAddressLine3);
-
-                            if (!string.IsNullOrEmpty(customerAddressLine4))
-                                addressBuilder.AppendLine(customerAddressLine4);
-
-                            if (!string.IsNullOrEmpty(customerPostcode))
-                                addressBuilder.Append(customerPostcode);
-
-                            string cusAddress = addressBuilder.ToString().Trim();
-
-                            if (!string.IsNullOrEmpty(cusAddress))
-                            {
-                                ev.Graphics.DrawString(cusAddress, cusFont, Brushes.Black, margin, currentHeight);
-                                currentHeight += ev.Graphics.MeasureString(cusAddress, cusFont).Height;
-                            }
-                        }
-
-                        // Customer Telephone Number - only print if available
-                        if (!string.IsNullOrEmpty(customerTelephoneNo))
-                        {
-                            ev.Graphics.DrawString(customerTelephoneNo, cusBoldFont, Brushes.Black, margin, currentHeight);
-                            currentHeight += ev.Graphics.MeasureString(customerTelephoneNo, cusBoldFont).Height;
-                        }
-
-                        // Draw the second line to split the page
-                        ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
-                        currentHeight += 10;
-
-                        // Items
-                        foreach (DataGridViewRow row in basketGridView.Rows)
-                        {
-                            if (row.Cells["dgvName"].Value == null) continue;
-
-                            string itemName = row.Cells["dgvName"].Value.ToString().PadRight(20);
-                            decimal originalPrice = Convert.ToDecimal(row.Cells["dgvOriginalPrice"].Value);
-                            decimal extraCharge = row.Cells["dgvExtraChargeValue"].Value != null ?
-                                Convert.ToDecimal(row.Cells["dgvExtraChargeValue"].Value) : 0m;
-                            int quantity = Convert.ToInt32(row.Cells["dgvQty"].Value);
-                            decimal totalItemPrice = Convert.ToDecimal(row.Cells["dgvPrice"].Value);
-
-                            ev.Graphics.DrawString(quantity.ToString() + " x " + itemName, font, Brushes.Black, margin, currentHeight);
-                            float itemPriceWidth = ev.Graphics.MeasureString("£" + totalItemPrice.ToString("F2"), font).Width;
-                            ev.Graphics.DrawString("£" + totalItemPrice.ToString("F2"), font, Brushes.Black, pageWidth - margin - itemPriceWidth, currentHeight);
-                            currentHeight += 20;
-
-                            // Show extra charge if any
-                            if (extraCharge > 0)
-                            {
-                                ev.Graphics.DrawString("   + Extra Charge", font, Brushes.Black, margin + 10, currentHeight);
-                                float extraChargeWidth = ev.Graphics.MeasureString("£" + extraCharge.ToString("F2"), font).Width;
-                                ev.Graphics.DrawString("£" + extraCharge.ToString("F2"), font, Brushes.Black, pageWidth - margin - extraChargeWidth, currentHeight);
-                                currentHeight += 20;
-                            }
-                        }
-
-
-                        // Total
-                        string totalLabel = "Total".PadRight(10);
-
-                        // CHANGE HERE: Calculate the total price correctly
-                        decimal calculatedTotal = CalculateTotal();
-                        string totalPriceStr = calculatedTotal.ToString("F2");
-
-                        ev.Graphics.DrawString(totalLabel, font, Brushes.Black, margin, currentHeight);
-                        float totalPriceWidth = ev.Graphics.MeasureString("£" + totalPriceStr, font).Width;
-                        ev.Graphics.DrawString("£" + totalPriceStr, font, Brushes.Black, pageWidth - margin - totalPriceWidth, currentHeight);
-                        currentHeight += 20;
-
-                        // Draw the third line to split the page
-                        ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
-                        currentHeight += 10;
-
-                        // Payment
-                        if (!string.IsNullOrEmpty(paymentType))
-                        {
-                            string paymentLabel = "PENDING:";
-                            ev.Graphics.DrawString(paymentLabel, cusBoldFont, Brushes.Black, margin, currentHeight);
-                            float paymentValueWidth = ev.Graphics.MeasureString(paymentType, cusBoldFont).Width;
-                            ev.Graphics.DrawString(paymentType, cusBoldFont, Brushes.Black, pageWidth - margin - paymentValueWidth, currentHeight);
+                            ev.Graphics.DrawString("   + Extra Charge", font, Brushes.Black, margin + 10, currentHeight);
+                            float extraChargeWidth = ev.Graphics.MeasureString("£" + extraCharge.ToString("F2"), font).Width;
+                            ev.Graphics.DrawString("£" + extraCharge.ToString("F2"), font, Brushes.Black, pageWidth - margin - extraChargeWidth, currentHeight);
                             currentHeight += 20;
                         }
-
-                        // Order ID
-                        ev.Graphics.DrawString("Order #: " + orderId, cusBoldFont, Brushes.Black, margin, currentHeight);
-                        currentHeight += 20;
-
-                        // Date & Time
-                        string timeLine = "Time: " + currentTime.ToString("hh:mm tt");
-                        string dateLine = "Date: " + currentTime.ToString("dd/MM/yyyy");
-                        ev.Graphics.DrawString(timeLine, font, Brushes.Black, margin, currentHeight);
-                        currentHeight += 20;
-                        ev.Graphics.DrawString(dateLine, font, Brushes.Black, margin, currentHeight);
-                        currentHeight += 20;
-
-                        ev.HasMorePages = false;
-                    };
-
-                    pd.Print();
-
-                    // Reset form state after printing
-                    ResetFormState();
-                    basketItemsByCategory.Clear();
-                    isOrderSaved = false;
-                    orderIdValue = 0;
-                    isEditMode = false; // Exit edit mode after printing
-                    txtDeliveryCharge.Text = "£0.00";
-
-                    // Close any open OrderViewForm and frmOrderHistory instances
-                    CloseRelatedForms();
-
-                    // If in edit mode, close this form too
-                    if (isEditMode)
-                    {
-                        this.Close();
-                    }
-                    else
-                    {
-                        // For new orders, reset the form for the next order
-                        ResetFormState();
-                        basketItemsByCategory.Clear();
-                        isOrderSaved = false;
-                        txtDeliveryCharge.Text = "£0.00";
                     }
 
-                    // Show a success message
-                    MessageBox.Show("Order saved and printed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Some items failed to save. Cannot print order.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+
+                    // Total
+                    string totalLabel = "Total".PadRight(10);
+
+                    // CHANGE HERE: Calculate the total price correctly
+                    decimal calculatedTotal = CalculateTotal();
+                    string totalPriceStr = calculatedTotal.ToString("F2");
+
+                    ev.Graphics.DrawString(totalLabel, font, Brushes.Black, margin, currentHeight);
+                    float totalPriceWidth = ev.Graphics.MeasureString("£" + totalPriceStr, font).Width;
+                    ev.Graphics.DrawString("£" + totalPriceStr, font, Brushes.Black, pageWidth - margin - totalPriceWidth, currentHeight);
+                    currentHeight += 20;
+
+                    // Draw the third line to split the page
+                    ev.Graphics.DrawLine(Pens.Black, 0, currentHeight, pageWidth, currentHeight);
+                    currentHeight += 10;
+
+                    // Payment
+                    if (!string.IsNullOrEmpty(lblPaymentOption.Text))
+                    {
+                        string paymentLabel = "PENDING:";
+                        ev.Graphics.DrawString(paymentLabel, cusBoldFont, Brushes.Black, margin, currentHeight);
+                        float paymentValueWidth = ev.Graphics.MeasureString(lblPaymentOption.Text, cusBoldFont).Width;
+                        ev.Graphics.DrawString(lblPaymentOption.Text, cusBoldFont, Brushes.Black, pageWidth - margin - paymentValueWidth, currentHeight);
+                        currentHeight += 20;
+                    }
+
+                    // Order ID
+                    ev.Graphics.DrawString("Order #: " + orderIdValue, cusBoldFont, Brushes.Black, margin, currentHeight);
+                    currentHeight += 20;
+
+                    // Date & Time
+                    string timeLine = "Time: " + DateTime.Now.ToString("hh:mm tt");
+                    string dateLine = "Date: " + DateTime.Now.ToString("dd/MM/yyyy");
+                    ev.Graphics.DrawString(timeLine, font, Brushes.Black, margin, currentHeight);
+                    currentHeight += 20;
+                    ev.Graphics.DrawString(dateLine, font, Brushes.Black, margin, currentHeight);
+                    currentHeight += 20;
+
+                    ev.HasMorePages = false;
+                };
+
+                pd.Print();
+
+                MessageBox.Show("Order saved and printed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
