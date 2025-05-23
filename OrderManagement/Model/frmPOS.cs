@@ -215,17 +215,20 @@ namespace OrderManagement.Model
                     DataGridViewRow row = basketGridView.Rows[rowIndex];
 
                     row.Cells["dgvName"].Value = item.ItemName;
-                    row.Cells["dgvPrice"].Value = item.ItemPrice;
-                    row.Cells["dgvQty"].Value = item.Quantity; // Set the correct quantity
                     row.Cells["dgvOriginalPrice"].Value = item.ItemPrice;
+                    row.Cells["dgvQty"].Value = item.Quantity;
+                    row.Cells["dgvExtraChargeValue"].Value = item.ExtraCharge;
+
+                    // Set the price to original price + extra charge
+                    row.Cells["dgvPrice"].Value = item.ItemPrice + item.ExtraCharge;
 
                     // Organize items by category if using that feature
                     string category = "General"; // Default category
                     if (!basketItemsByCategory.ContainsKey(category))
                         basketItemsByCategory[category] = new List<DataGridViewRow>();
                     basketItemsByCategory[category].Add(row);
-
                 }
+
 
                 CalculateTotal();
                 LoadPreviousOrderItems(id);
@@ -313,6 +316,55 @@ namespace OrderManagement.Model
 
 
 
+        // Add this method to load order items with extra charges
+        public void LoadOrderItemsForEditing(int orderId)
+        {
+            string query = @"
+        SELECT 
+            ItemName, 
+            ItemPrice, 
+            Quantity, 
+            ExtraCharge
+        FROM 
+            OrderItems 
+        WHERE 
+            OrderId = @OrderId";
+
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+    {
+        { "@OrderId", orderId }
+    };
+
+            DataTable dt = DatabaseManager.ExecuteQuery(query, parameters);
+
+            if (dt != null)
+            {
+                basketGridView.Rows.Clear();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    string itemName = row["ItemName"].ToString();
+                    decimal itemPrice = Convert.ToDecimal(row["ItemPrice"]);
+                    int quantity = Convert.ToInt32(row["Quantity"]);
+                    decimal extraCharge = row["ExtraCharge"] != DBNull.Value ?
+                        Convert.ToDecimal(row["ExtraCharge"]) : 0m;
+
+                    // Add to basket grid
+                    int rowIndex = basketGridView.Rows.Add();
+                    DataGridViewRow gridRow = basketGridView.Rows[rowIndex];
+
+                    gridRow.Cells["dgvName"].Value = itemName;
+                    gridRow.Cells["dgvOriginalPrice"].Value = itemPrice;
+                    gridRow.Cells["dgvQty"].Value = quantity;
+                    gridRow.Cells["dgvExtraChargeValue"].Value = extraCharge;
+
+                    // Set the price to original price + extra charge (not multiplied by quantity)
+                    gridRow.Cells["dgvPrice"].Value = itemPrice + extraCharge;
+                }
+
+                UpdateTotalPriceLabel();
+            }
+        }
 
 
 
