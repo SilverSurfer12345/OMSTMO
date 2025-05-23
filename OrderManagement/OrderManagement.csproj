@@ -168,6 +168,9 @@
     <Compile Include="frmPOS\CustomerManager.cs" />
     <Compile Include="frmPOS\IPosPresenter.cs" />
     <Compile Include="frmPOS\IPosView.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormPresenter.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormView.cs" />
+    <Compile Include="frmPOS\OrderManagement\OrderView\OrderViewFormPresenter.cs" />
     <Compile Include="frmPOS\PosPresenter.cs" />
     <Compile Include="frmPOS\SafeOperations.cs" />
     <Compile Include="Model\frmMain.cs">
@@ -286,10 +289,10 @@
     <Compile Include="View\frmCategoryView.Designer.cs">
       <DependentUpon>frmCategoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\frmOrderHistory.cs">
+    <Compile Include="frmPOS\OrderManagement\frmOrderHistory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\frmOrderHistory.Designer.cs">
+    <Compile Include="frmPOS\OrderManagement\frmOrderHistory.Designer.cs">
       <DependentUpon>frmOrderHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="View\frmOrderProgress.cs">
@@ -310,10 +313,10 @@
     <Compile Include="View\frmStaffView.Designer.cs">
       <DependentUpon>frmStaffView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\OrderViewForm.cs">
+    <Compile Include="frmPOS\OrderManagement\OrderView\OrderViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\OrderViewForm.Designer.cs">
+    <Compile Include="frmPOS\OrderManagement\OrderView\OrderViewForm.Designer.cs">
       <DependentUpon>OrderViewForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="frmHome.resx">
@@ -372,7 +375,7 @@
     <EmbeddedResource Include="View\frmDeliveryCharges.resx">
       <DependentUpon>frmDeliveryCharges.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\frmOrderHistory.resx">
+    <EmbeddedResource Include="frmPOS\OrderManagement\frmOrderHistory.resx">
       <DependentUpon>frmOrderHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\frmOrderProgress.resx">
@@ -387,7 +390,7 @@
     <EmbeddedResource Include="View\frmStaffView.resx">
       <DependentUpon>frmStaffView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\OrderViewForm.resx">
+    <EmbeddedResource Include="frmPOS\OrderManagement\OrderView\OrderViewForm.resx">
       <DependentUpon>OrderViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="config\orderNotificationConfig.json">

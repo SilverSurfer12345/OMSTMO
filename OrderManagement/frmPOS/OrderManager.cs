@@ -57,6 +57,12 @@ namespace OrderManagement.Model
             public byte[] ItemImage { get; set; } // Assuming you store image for food items
         }
 
+        public class PresetChargeDto // Added DTO for Preset Charges
+        {
+            public string ChargeName { get; set; }
+            public decimal ChargeValue { get; set; }
+        }
+
         // --- Methods for Order Management ---
 
         public OrderDto GetOrderDetails(int orderId)
@@ -330,6 +336,33 @@ namespace OrderManagement.Model
             string query = "UPDATE Orders SET PaymentType = @PaymentType WHERE OrderId = @OrderId";
             var parameters = new Dictionary<string, object> { { "@PaymentType", paymentType }, { "@OrderId", orderId } };
             DatabaseManager.ExecuteNonQuery(query, parameters);
+        }
+
+        // Added methods for PresetCharges
+        public List<PresetChargeDto> GetPresetCharges()
+        {
+            List<PresetChargeDto> presetCharges = new List<PresetChargeDto>();
+            string query = "SELECT ChargeName, ChargeValue FROM PresetCharges";
+            DataTable dt = DatabaseManager.ExecuteQuery(query);
+            if (dt != null)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    presetCharges.Add(new PresetChargeDto
+                    {
+                        ChargeName = SafeOperations.SafeGetString(row, "ChargeName"),
+                        ChargeValue = SafeOperations.SafeGetDecimal(row, "ChargeValue")
+                    });
+                }
+            }
+            return presetCharges;
+        }
+
+        public decimal GetPresetChargesTotal()
+        {
+            string query = "SELECT SUM(ChargeValue) FROM PresetCharges WHERE ChargeValue > 0";
+            object result = DatabaseManager.ExecuteScalar(query);
+            return result != null && result != DBNull.Value ? Convert.ToDecimal(result) : 0m;
         }
     }
 }
