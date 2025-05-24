@@ -30,6 +30,9 @@ namespace OrderManagement.Presenter
         private DataTable _customerSearchDataTable = new DataTable(); // For search results
         private List<BasketItem> _basketItems = new List<BasketItem>(); // In-memory representation of basket
 
+        //search cust details with tel number
+        private List<CustomerManager.CustomerDto> _customerSearchResults = new List<CustomerManager.CustomerDto>();
+
         // DTO for basket items (can be a nested class or separate file)
         public class BasketItem
         {
@@ -272,7 +275,7 @@ namespace OrderManagement.Presenter
                 if (_currentOrderType == "DELIVERY")
                 {
                     // Call the static method directly, casting to frmPOS
-                    deliveryCharge = DeliveryChargeManager.GetDeliveryCharge(_view as frmPOS);
+                    deliveryCharge = DeliveryChargeManager.CalculateDeliveryCharge(_view.AddressDisplayText);
                 }
 
                 if (_isEditMode && _currentOrderId > 0)
@@ -630,7 +633,7 @@ namespace OrderManagement.Presenter
         public void HandleDeliveryChargeAmend()
         {
             // Call the static method directly, casting to frmPOS
-            DeliveryChargeManager.ManageDeliveryCharges(_view as frmPOS);
+            DeliveryChargeManager.ShowDeliveryChargeManager(_view as frmPOS);
             CalculateAndDisplayTotal();
         }
 
@@ -658,25 +661,21 @@ namespace OrderManagement.Presenter
             {
                 _view.ClearCustomerSearchList();
                 _view.SetCustomerSearchListVisibility(false);
+                _customerSearchResults.Clear();
                 return;
             }
 
             try
             {
-                _customerSearchDataTable.Clear();
                 var customers = _customerManager.SearchCustomersByTelephone(telephoneNo);
+                _customerSearchResults = customers; // Store the results
 
                 _view.ClearCustomerSearchList();
-                int maxWidth = 0;
                 foreach (var customer in customers)
                 {
                     string fullAddress = $"{customer.HouseNameNumber} {customer.AddressLine1}, {customer.AddressLine2}, {customer.AddressLine3}, {customer.AddressLine4}, {customer.Postcode}";
                     string customerDetails = $"{customer.Forename} {customer.Surname} - {fullAddress}";
                     _view.AddCustomerSearchItem(customerDetails);
-
-                    // Re-measure width (this is UI specific, ideally done in View)
-                    // You'd need a way for the Presenter to request this from the View.
-                    // For now, assume the View handles its own sizing.
                 }
 
                 _view.SetCustomerSearchListVisibility(customers.Any());
@@ -686,6 +685,7 @@ namespace OrderManagement.Presenter
                 _view.ShowMessage("Database error while searching customers: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _view.ClearCustomerSearchList();
                 _view.SetCustomerSearchListVisibility(false);
+                _customerSearchResults.Clear();
             }
         }
 
@@ -742,26 +742,12 @@ namespace OrderManagement.Presenter
 
         public void HandleCustomerSearchItemSelected(int selectedIndex)
         {
-            if (selectedIndex != -1 && selectedIndex < _customerSearchDataTable.Rows.Count)
+            if (selectedIndex != -1 && selectedIndex < _customerSearchResults.Count)
             {
-                _view.SetCustomerSearchListVisibility(false);
-                DataRow row = _customerSearchDataTable.Rows[selectedIndex];
-                var customer = new CustomerManager.CustomerDto // Use the nested DTO from CustomerManager
-                {
-                    Id = SafeOperations.SafeGetInt(row, "Id"),
-                    Forename = SafeOperations.SafeGetString(row, "forename"),
-                    Surname = SafeOperations.SafeGetString(row, "surname"),
-                    TelephoneNo = SafeOperations.SafeGetString(row, "telephoneNo"),
-                    Email = SafeOperations.SafeGetString(row, "Email"),
-                    HouseNameNumber = SafeOperations.SafeGetString(row, "houseNameNumber"),
-                    AddressLine1 = SafeOperations.SafeGetString(row, "AddressLine1"),
-                    AddressLine2 = SafeOperations.SafeGetString(row, "AddressLine2"),
-                    AddressLine3 = SafeOperations.SafeGetString(row, "AddressLine3"),
-                    AddressLine4 = SafeOperations.SafeGetString(row, "AddressLine4"),
-                    Postcode = SafeOperations.SafeGetString(row, "Postcode")
-                };
+                var customer = _customerSearchResults[selectedIndex];
                 UpdateCustomerDetailsInPresenter(customer);
                 LoadPreviousOrderItemsForCustomer(customer.Id);
+                _view.SetCustomerSearchListVisibility(false);
             }
         }
 
@@ -913,7 +899,7 @@ namespace OrderManagement.Presenter
             if (_currentOrderType == "DELIVERY")
             {
                 // Call the static method directly, casting to frmPOS
-                total += DeliveryChargeManager.GetDeliveryCharge(_view as frmPOS);
+                total += DeliveryChargeManager.CalculateDeliveryCharge(_view.AddressDisplayText);
             }
 
             total += frmPresetCharges.GetTotalPresetCharges(); // Still directly calling static method
@@ -1042,7 +1028,7 @@ namespace OrderManagement.Presenter
                     _view.IsDeliveryChargeVisible = true;
                     _view.IsDeliveryChargeAmendButtonVisible = true;
                     // Call the static method directly, casting to frmPOS
-                    DeliveryChargeManager.AutoCalculateDeliveryCharge(_view as frmPOS);
+                    DeliveryChargeManager.AutoSetDeliveryCharge(_view as frmPOS);
                 }
                 else
                 {
@@ -1117,14 +1103,24 @@ namespace OrderManagement.Presenter
         private void HandleOrderTypeChanged(object sender, string orderType)
         {
             _currentOrderType = orderType;
-            
-            // Call DeliveryChargeManager to handle the order type change
-            DeliveryChargeManager.OrderTypeChanged(_view as frmPOS, orderType);
-            
-            // Any other business logic related to order type change
-            // For example, calculating delivery charges, updating UI, etc.
-            
-            // Set button colors
+
+            // Removed the call to DeliveryChargeManager.OrderTypeChanged as it does not exist
+            // Instead, handle the logic directly here
+            if (_currentOrderType.Equals("DELIVERY", StringComparison.OrdinalIgnoreCase))
+            {
+                _view.ShowCustomerAddressFields();
+                _view.IsDeliveryChargeVisible = true;
+                _view.IsDeliveryChargeAmendButtonVisible = true;
+                DeliveryChargeManager.AutoSetDeliveryCharge(_view as frmPOS); // Adjust delivery charge
+            }
+            else
+            {
+                _view.HideCustomerAddressFields();
+                _view.IsDeliveryChargeVisible = false;
+                _view.IsDeliveryChargeAmendButtonVisible = false;
+            }
+
+            // Update the button colors
             _view.SetOrderTypeButtonColor(orderType, Color.Green);
         }
     }

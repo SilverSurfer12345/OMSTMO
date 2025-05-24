@@ -64,7 +64,7 @@ namespace OrderManagement.View
             lstSearchResult.HorizontalScrollbar = false;
             lstSearchResult.IntegralHeight = false;
             lstSearchResult.Height = 150;
-            DeliveryChargeManager.Initialize(this); // This should be handled by Presenter or a dedicated service
+            DeliveryChargeManager.AutoSetDeliveryCharge(this); // Automatically sets the delivery charge
             ViewLoaded?.Invoke(this, EventArgs.Empty);
         }
 
@@ -334,24 +334,29 @@ namespace OrderManagement.View
         }
 
         private void HandleOrderTypeButtonClick(object sender, EventArgs e)
-{
-    Button clickedButton = sender as Button;
-    if (clickedButton != null && clickedButton.Tag is string orderType)
-    {
-        ResetOrderTypeButtons();
-        clickedButton.BackColor = Color.Green;
-        
-        // Notify the presenter about the order type change
-        OrderTypeChanged?.Invoke(this, orderType);
-        
-        // Handle visibility of delivery-related controls
-        bool isDelivery = orderType == "DELIVERY";
-        IsDeliveryChargeVisible = isDelivery;
-        IsDeliveryChargeAmendButtonVisible = isDelivery;
-        IsCustomerAddressVisible = isDelivery;
-        IsAddressDisplayVisible = isDelivery;
-    }
-}
+        {
+            Button clickedButton = sender as Button;
+            if (clickedButton != null && clickedButton.Tag is string orderType)
+            {
+                ResetOrderTypeButtons();
+                clickedButton.BackColor = Color.Green;
+                
+                // Notify the presenter about the order type change
+                OrderTypeChanged?.Invoke(this, orderType);
+                
+                // Handle visibility of delivery-related controls
+                bool isDelivery = orderType == "DELIVERY";
+                IsDeliveryChargeVisible = isDelivery;
+                IsDeliveryChargeAmendButtonVisible = isDelivery;
+                IsCustomerAddressVisible = isDelivery;
+                IsAddressDisplayVisible = isDelivery;
+
+                if (orderType == "DELIVERY")
+                {
+                    DeliveryChargeManager.AutoSetDeliveryCharge(this);
+                }
+            }
+        }
 
         private void ResetOrderTypeButtons()
         {
