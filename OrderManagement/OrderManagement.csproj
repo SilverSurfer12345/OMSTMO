@@ -151,6 +151,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\frmSalesReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPOS\OrderManagement\OrderHistory\frmSalesReport.Designer.cs">
+      <DependentUpon>frmSalesReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Managers\DatabaseManager.cs" />
     <Compile Include="Managers\NotificationConfigForm.cs" />
     <Compile Include="frmHome.cs">
@@ -166,15 +172,15 @@
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="Managers\CustomerManager.cs" />
-    <Compile Include="frmPOS\POS\IPosPresenter.cs" />
-    <Compile Include="frmPOS\POS\IPosView.cs" />
+    <Compile Include="POS\IPosPresenter.cs" />
+    <Compile Include="POS\IPosView.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderHistory\IOrderHistoryPresenter.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderHistory\IOrderHistoryView.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderHistory\OrderHistoryPresenter.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormPresenter.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\IOrderViewFormView.cs" />
     <Compile Include="frmPOS\OrderManagement\OrderView\OrderViewFormPresenter.cs" />
-    <Compile Include="frmPOS\POS\PosPresenter.cs" />
+    <Compile Include="POS\PosPresenter.cs" />
     <Compile Include="Managers\SafeOperations.cs" />
     <Compile Include="Model\frmMain.cs">
       <SubType>Form</SubType>
@@ -209,10 +215,10 @@
     <Compile Include="Model\frmCategoryAdd.Designer.cs">
       <DependentUpon>frmCategoryAdd.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmPOS\POS\frmPOS.cs">
+    <Compile Include="POS\frmPOS.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmPOS\POS\frmPOS.Designer.cs">
+    <Compile Include="POS\frmPOS.Designer.cs">
       <DependentUpon>frmPOS.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\frmStaffAdd.cs">
@@ -341,7 +347,7 @@
     <EmbeddedResource Include="Model\frmCategoryAdd.resx">
       <DependentUpon>frmCategoryAdd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmPOS\POS\frmPOS.resx">
+    <EmbeddedResource Include="POS\frmPOS.resx">
       <DependentUpon>frmPOS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Model\frmStaffAdd.resx">

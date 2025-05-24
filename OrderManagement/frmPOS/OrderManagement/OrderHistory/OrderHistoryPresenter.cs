@@ -388,9 +388,89 @@ namespace OrderManagement.Presenter
 
         public void HandleCalculationsClicked()
         {
-            // Assuming CalculationsForm exists and is a Form
-            Form calculationsForm = new Form(); // Replace with actual CalculationsForm instantiation
-            _view.ShowCalculationsForm(calculationsForm);
+            if (_allOrderHistoryData == null || _allOrderHistoryData.Rows.Count == 0)
+            {
+                _view.ShowMessage("No data available for calculations.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Get the current filter date range
+            DateTime fromDate = _view.FromDate;
+            DateTime toDate = _view.ToDate;
+
+            // Filter orders based on the current date range
+            var filteredOrders = _allOrderHistoryData.AsEnumerable()
+                .Where(r => r.Field<DateTime>("dgvOrderDate").Date >= fromDate.Date &&
+                            r.Field<DateTime>("dgvOrderDate").Date <= toDate.Date);
+
+            if (!filteredOrders.Any())
+            {
+                _view.ShowMessage("No orders found in the selected date range.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Calculate order type statistics
+            Dictionary<string, int> orderTypeCount = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, decimal> orderTypeTotal = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+
+            // Calculate payment type statistics
+            Dictionary<string, int> paymentTypeCount = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, decimal> paymentTypeTotal = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+
+            int totalOrders = 0;
+            decimal grandTotal = 0;
+
+            foreach (var order in filteredOrders)
+            {
+                string orderType = SafeOperations.SafeGetString(order, "dgvOrderType");
+                string paymentType = SafeOperations.SafeGetString(order, "dgvPayment");
+                decimal totalPrice = SafeOperations.SafeGetDecimal(order, "dgvTotalPrice");
+
+                // Skip cancelled orders for grand total calculation
+                if (!string.Equals(paymentType, "CANCELLED", StringComparison.OrdinalIgnoreCase) &&
+                    !string.Equals(paymentType, "REFUNDED", StringComparison.OrdinalIgnoreCase))
+                {
+                    grandTotal += totalPrice;
+                    totalOrders++;
+                }
+
+                // Order Type Statistics
+                if (!string.IsNullOrEmpty(orderType))
+                {
+                    // Increment count
+                    if (!orderTypeCount.ContainsKey(orderType))
+                    {
+                        orderTypeCount[orderType] = 0;
+                        orderTypeTotal[orderType] = 0;
+                    }
+                    orderTypeCount[orderType]++;
+                    orderTypeTotal[orderType] += totalPrice;
+                }
+
+                // Payment Type Statistics
+                if (!string.IsNullOrEmpty(paymentType))
+                {
+                    // Increment count
+                    if (!paymentTypeCount.ContainsKey(paymentType))
+                    {
+                        paymentTypeCount[paymentType] = 0;
+                        paymentTypeTotal[paymentType] = 0;
+                    }
+                    paymentTypeCount[paymentType]++;
+                    paymentTypeTotal[paymentType] += totalPrice;
+                }
+            }
+
+            // Create and show the sales report form
+            frmSalesReport salesReportForm = new frmSalesReport();
+            salesReportForm.LoadReportData(
+                fromDate, toDate,
+                orderTypeCount, orderTypeTotal,
+                paymentTypeCount, paymentTypeTotal,
+                totalOrders, grandTotal
+            );
+
+            _view.ShowCalculationsForm(salesReportForm);
         }
 
         public void HandleCellContentClick(OrderHistoryCellClickEventArgs e)
