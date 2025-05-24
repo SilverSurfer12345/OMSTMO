@@ -86,7 +86,7 @@ namespace OrderManagement.View
         public int SelectedDiscountIndex { get => cbCustomDiscount.SelectedIndex; set => cbCustomDiscount.SelectedIndex = value; }
         public Color CurrentOrdersButtonBackColor { get => btnCurrentOrders.BackColor; set => btnCurrentOrders.BackColor = value; }
         public Color CurrentOrdersButtonForeColor { get => btnCurrentOrders.ForeColor; set => btnCurrentOrders.ForeColor = value; }
-
+        public string DeliveryChargeText { get => txtDeliveryCharge.Text; set => txtDeliveryCharge.Text = value; }
 
         // Methods for displaying/updating UI
         public void ClearBasket() => basketGridView.Rows.Clear();

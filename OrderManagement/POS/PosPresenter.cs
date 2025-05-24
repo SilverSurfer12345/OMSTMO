@@ -898,12 +898,14 @@ namespace OrderManagement.Presenter
 
             if (_currentOrderType == "DELIVERY")
             {
-                // Call the static method directly, casting to frmPOS
-                total += DeliveryChargeManager.CalculateDeliveryCharge(_view.AddressDisplayText);
+                // Use the value from the delivery charge text box
+                if (decimal.TryParse(_view.DeliveryChargeText, System.Globalization.NumberStyles.Currency, null, out decimal deliveryCharge))
+                {
+                    total += deliveryCharge;
+                }
             }
 
-            total += frmPresetCharges.GetTotalPresetCharges(); // Still directly calling static method
-
+            total += frmPresetCharges.GetTotalPresetCharges();
             total = total * (1 - _discountRate);
             return total;
         }
@@ -950,16 +952,27 @@ namespace OrderManagement.Presenter
             return _currentCustomerId;
         }
 
-        private void UpdateCustomerDetailsInPresenter(CustomerManager.CustomerDto customer) // Changed parameter type
+        private void UpdateCustomerDetailsInPresenter(CustomerManager.CustomerDto customer)
         {
             _currentCustomerId = customer.Id;
             _view.CustomerDetailsText = $"{customer.Forename} {customer.Surname}";
             _view.CustomerTelephoneText = customer.TelephoneNo;
-            _view.PreviousOrdersText = customer.PreviousOrdersCount.ToString(); // Assuming this property exists
+            _view.PreviousOrdersText = customer.PreviousOrdersCount.ToString();
             _view.AddressDisplayText = $"{customer.HouseNameNumber} {customer.AddressLine1}, {customer.AddressLine2}, {customer.AddressLine3}, {customer.AddressLine4}, {customer.Postcode}";
             _view.CustomerActionButtonText = "Update Customer";
-            // Set internal state that customer exists
-            // This flag might be removed if _currentCustomerId > 0 implies existence.
+
+            // --- Add this block ---
+            if (_currentOrderType == "DELIVERY" && !string.IsNullOrWhiteSpace(customer.Postcode))
+            {
+                decimal charge = DeliveryChargeManager.CalculateDeliveryCharge(customer.Postcode);
+                _view.DeliveryChargeText = charge.ToString("C2");
+            }
+            else
+            {
+                _view.DeliveryChargeText = "£0.00";
+            }
+            // ----------------------
+
             CalculateAndDisplayTotal(); // Recalculate total in case delivery charge changes
         }
 
@@ -1104,13 +1117,25 @@ namespace OrderManagement.Presenter
         {
             _currentOrderType = orderType;
 
-            // Removed the call to DeliveryChargeManager.OrderTypeChanged as it does not exist
-            // Instead, handle the logic directly here
             if (_currentOrderType.Equals("DELIVERY", StringComparison.OrdinalIgnoreCase))
             {
                 _view.ShowCustomerAddressFields();
                 _view.IsDeliveryChargeVisible = true;
                 _view.IsDeliveryChargeAmendButtonVisible = true;
+
+                // --- Add this block ---
+                string postcode = ExtractPostcodeFromAddress(_view.AddressDisplayText);
+                if (!string.IsNullOrWhiteSpace(postcode))
+                {
+                    decimal charge = DeliveryChargeManager.CalculateDeliveryCharge(postcode);
+                    _view.DeliveryChargeText = charge.ToString("C2");
+                }
+                else
+                {
+                    _view.DeliveryChargeText = "£0.00";
+                }
+                // ----------------------
+
                 DeliveryChargeManager.AutoSetDeliveryCharge(_view as frmPOS); // Adjust delivery charge
             }
             else
@@ -1118,10 +1143,20 @@ namespace OrderManagement.Presenter
                 _view.HideCustomerAddressFields();
                 _view.IsDeliveryChargeVisible = false;
                 _view.IsDeliveryChargeAmendButtonVisible = false;
+                _view.DeliveryChargeText = "£0.00"; // Clear delivery charge
             }
 
             // Update the button colors
             _view.SetOrderTypeButtonColor(orderType, Color.Green);
+
+            CalculateAndDisplayTotal();
+        }
+
+        private string ExtractPostcodeFromAddress(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address)) return null;
+            var parts = address.Split(',');
+            return parts.Length > 0 ? parts[parts.Length - 1].Trim() : null;
         }
     }
 }

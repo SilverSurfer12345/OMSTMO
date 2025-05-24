@@ -24,6 +24,7 @@ namespace OrderManagement.View
         int SelectedDiscountIndex { get; set; }
         Color CurrentOrdersButtonBackColor { get; set; }
         Color CurrentOrdersButtonForeColor { get; set; }
+        string DeliveryChargeText { get; set; }
 
         // Methods for displaying/updating UI (Presenter calls these)
         void ClearBasket();
@@ -70,7 +71,8 @@ namespace OrderManagement.View
         event System.EventHandler<string> DiscountSelected;
         event System.EventHandler OrderAlertTimerTick;
         event System.EventHandler AlertTimerTick;
-        event System.EventHandler<string> OrderTypeChanged;    }
+        event System.EventHandler<string> OrderTypeChanged;
+    }
 
     // DTOs for displaying data
     public class FoodItemDisplayDto
