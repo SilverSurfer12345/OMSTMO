@@ -73,7 +73,7 @@ namespace OrderManagement.View
         // Properties for displaying data
         public string CustomerDetailsText { get => txtCustomerDetails.Text; set => txtCustomerDetails.Text = value; }
         public string CustomerTelephoneText { get => txtCstTelephone.Text; set => txtCstTelephone.Text = value; }
-        public string AddressDisplayText { get => lblAddressDisplay.Text; set => lblAddressDisplay.Text = value; }
+        public string AddressDisplayText { get => txtAddressDisplay.Text; set => txtAddressDisplay.Text = value; }
         public string PreviousOrdersText { get => txtPreviousOrders.Text; set => txtPreviousOrders.Text = value; }
         public string TotalPriceText { get => txtTotalPrice.Text; set => txtTotalPrice.Text = value; }
         public string PaymentOptionText { get => lblPaymentOption.Text; set => lblPaymentOption.Text = value; }
@@ -81,7 +81,7 @@ namespace OrderManagement.View
         public bool IsDeliveryChargeVisible { get => txtDeliveryCharge.Visible; set => txtDeliveryCharge.Visible = value; }
         public bool IsDeliveryChargeAmendButtonVisible { get => btnDeliveryChargeAmend.Visible; set => btnDeliveryChargeAmend.Visible = value; }
         public bool IsCustomerAddressVisible { get => lblCstAddress.Visible; set => lblCstAddress.Visible = value; }
-        public bool IsAddressDisplayVisible { get => lblAddressDisplay.Visible; set => lblAddressDisplay.Visible = value; }
+        public bool IsAddressDisplayVisible { get => txtAddressDisplay.Visible; set => txtAddressDisplay.Visible = value; }
         public string CustomerActionButtonText { get => btnCustomerAction.Text; set => btnCustomerAction.Text = value; }
         public int SelectedDiscountIndex { get => cbCustomDiscount.SelectedIndex; set => cbCustomDiscount.SelectedIndex = value; }
         public Color CurrentOrdersButtonBackColor { get => btnCurrentOrders.BackColor; set => btnCurrentOrders.BackColor = value; }
@@ -246,13 +246,13 @@ namespace OrderManagement.View
         public void HideCustomerAddressFields()
         {
             lblCstAddress.Visible = false;
-            lblAddressDisplay.Visible = false;
+            txtAddressDisplay.Visible = false;
         }
 
         public void ShowCustomerAddressFields()
         {
             lblCstAddress.Visible = true;
-            lblAddressDisplay.Visible = true;
+            txtAddressDisplay.Visible = true;
         }
 
         public void CloseView() => this.Close();
@@ -445,6 +445,15 @@ namespace OrderManagement.View
             orderAlertTimer?.Stop();
             orderAlertTimer?.Dispose();
             // flashTimer is managed by Presenter, so it should handle its disposal
+        }
+
+        private void btnCurrentOrders_Click(object sender, EventArgs e)
+        {
+            // Open the Order Progress form as a dialog
+            using (var orderProgressForm = new frmOrderProgress())
+            {
+                orderProgressForm.ShowDialog(this);
+            }
         }
     }
 }
