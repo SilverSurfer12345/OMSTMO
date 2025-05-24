@@ -6,6 +6,23 @@ using System.Windows.Forms;
 
 namespace OrderManagement.View
 {
+    // New EventArgs class to pass detailed click information
+    public class OrderHistoryCellClickEventArgs : EventArgs
+    {
+        public int RowIndex { get; }
+        public int ColumnIndex { get; }
+        public string ColumnName { get; }
+        public int OrderId { get; }
+
+        public OrderHistoryCellClickEventArgs(int rowIndex, int columnIndex, string columnName, int orderId)
+        {
+            RowIndex = rowIndex;
+            ColumnIndex = columnIndex;
+            ColumnName = columnName;
+            OrderId = orderId;
+        }
+    }
+
     public interface IOrderHistoryView
     {
         // Properties for displaying data
@@ -26,7 +43,10 @@ namespace OrderManagement.View
         void SetPaymentTypeItems(IEnumerable<string> items);
         void SetDateRangeWithoutEvents(DateTime from, DateTime to);
         void SetColumnOrder(string[] columnOrder);
-        void ShowCalculationsForm(Form calculationsForm); // To show the new calculations form
+        void ShowCalculationsForm(Form calculationsForm);
+
+        // New method to open the order view form
+        void ShowOrderViewForm(int orderId);
 
         // Events for user actions
         event EventHandler ViewLoaded;
@@ -39,7 +59,9 @@ namespace OrderManagement.View
         event EventHandler DownloadClicked;
         event EventHandler PrintClicked;
         event EventHandler ResetFiltersClicked;
-        event EventHandler<DataGridViewCellEventArgs> CellContentClicked;
+
+        // Modified event signature to use the custom EventArgs
+        event EventHandler<OrderHistoryCellClickEventArgs> CellContentClicked;
         event EventHandler CalculationsClicked;
         event FormClosingEventHandler FormClosingConfirmed;
     }

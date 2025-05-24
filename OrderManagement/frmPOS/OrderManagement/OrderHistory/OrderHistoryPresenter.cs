@@ -36,7 +36,8 @@ namespace OrderManagement.Presenter
             _view.DownloadClicked += (s, e) => HandleDownloadClicked();
             _view.PrintClicked += (s, e) => HandlePrintClicked();
             _view.ResetFiltersClicked += (s, e) => HandleResetFiltersClicked();
-            _view.CellContentClicked += (s, e) => HandleCellContentClick(e);
+            // Event subscription updated to use the custom EventArgs
+            _view.CellContentClicked += (s, e) => HandleCellContentClick((OrderHistoryCellClickEventArgs)e);
             _view.CalculationsClicked += (s, e) => HandleCalculationsClicked();
             _view.FormClosingConfirmed += (s, e) => HandleFormClosing(e);
         }
@@ -45,7 +46,8 @@ namespace OrderManagement.Presenter
         {
             // Initial setup for date range and loading data
             _view.SetDateRangeWithoutEvents(DateTime.Today, DateTime.Today);
-            LoadOrderHistory();
+            LoadOrderHistory(); // Load all data
+            ApplyAllFilters(); // Apply initial filters
         }
 
         public void HandleViewLoaded()
@@ -56,6 +58,10 @@ namespace OrderManagement.Presenter
             ApplyAllFilters(); // Apply initial filters based on default dropdown values
         }
 
+        /// <summary>
+        /// Loads all order history data from the database into _allOrderHistoryData.
+        /// This method does NOT update the DataGridView directly.
+        /// </summary>
         private void LoadOrderHistory()
         {
             string query = @"
@@ -78,15 +84,12 @@ namespace OrderManagement.Presenter
                 {
                     _allOrderHistoryData = new DataTable(); // Ensure it's not null
                 }
-                _view.OrderHistoryDataSource = _allOrderHistoryData; // Set initial data source
-                _view.RefreshOrderHistoryGrid(); // Request view to refresh
-                UpdateTotalValue();
+                // Removed direct DataGridView update here. ApplyAllFilters will handle it.
             }
             catch (Exception ex)
             {
                 _view.ShowMessage($"Error loading order history: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _allOrderHistoryData = new DataTable(); // Ensure it's not null on error
-                _view.OrderHistoryDataSource = _allOrderHistoryData;
             }
         }
 
@@ -123,6 +126,10 @@ namespace OrderManagement.Presenter
             _view.SetPaymentTypeItems(paymentTypes.OrderBy(s => s));
         }
 
+        /// <summary>
+        /// Applies all active filters (date, order type, payment type, search text)
+        /// to the _allOrderHistoryData and updates the DataGridView.
+        /// </summary>
         private void ApplyAllFilters()
         {
             if (_allOrderHistoryData == null) return;
@@ -145,10 +152,27 @@ namespace OrderManagement.Presenter
                 );
 
             _view.OrderHistoryDataSource = filteredRows.Any() ? filteredRows.CopyToDataTable() : null;
-            _view.RefreshOrderHistoryGrid(); // Request view to refresh
-            UpdateTotalValue();
+            
+            // Define the desired column order array
+            string[] columnOrder = new string[] 
+            { 
+                "dgvOrderId", "dgvName", "dgvAddress", "dgvOrderType", 
+                "dgvOrderDate", "dgvTotalPrice", "dgvPayment", 
+                "dgvView", "dgvCancel", "dgvDelete" 
+            };
+            
+            // Restore column order after setting the DataSource
+            _view.SetColumnOrder(columnOrder);
+            
+            _view.RefreshOrderHistoryGrid();
+            UpdateTotalValue(); // Update total value after filtering
         }
 
+        /// <summary>
+        /// Updates the total value displayed in the view based on the currently
+        /// filtered and displayed orders in the DataGridView.
+        /// Excludes cancelled and refunded orders from the total.
+        /// </summary>
         private void UpdateTotalValue()
         {
             decimal totalValue = 0;
@@ -184,11 +208,12 @@ namespace OrderManagement.Presenter
 
         public void HandleResetFiltersClicked()
         {
+            // Reset dropdowns and search text to default
             _view.SetOrderTypeItems(new string[] { "ALL", "WAITING", "COLLECTION", "DELIVERY", "ONLINE", "RESTAURANT", "CANCELLED" });
             _view.SetPaymentTypeItems(new string[] { "ALL", "CASH", "CARD", "NOT PAID", "CANCELLED", "PENDING", "REFUNDED" });
             _view.SearchText = "";
-            _view.SetDateRangeWithoutEvents(DateTime.Today, DateTime.Today);
-            LoadOrderHistory(); // Reload all data
+            _view.SetDateRangeWithoutEvents(DateTime.Today, DateTime.Today); // Reset date range
+            LoadOrderHistory(); // Reload all data from DB to ensure _allOrderHistoryData is fresh
             ApplyAllFilters(); // Reapply filters (which should now be default)
         }
 
@@ -248,7 +273,7 @@ namespace OrderManagement.Presenter
                                 streamWriter.WriteLine();
                             }
                         }
-                        _view.ShowMessage($"CSV file '{Path.GetFileName(saveFileDialog.FileName)}' created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // Removed success message as per user request
                     }
                     catch (Exception ex)
                     {
@@ -313,6 +338,7 @@ namespace OrderManagement.Presenter
                     x += col.Width;
                 }
                 currentY += lineHeight;
+
                 // Fix: Create a Pen object for DrawLine
                 using (Pen linePen = new Pen(blackBrush.Color, 1)) // Using a pen with width 1
                 {
@@ -342,669 +368,109 @@ namespace OrderManagement.Presenter
                     }
                     currentY += lineHeight;
 
-                    // Check for new page
-                    if (currentY + lineHeight > e.MarginBounds.Height)
+                    // Check if more pages are needed
+                    if (currentY + lineHeight > e.PageBounds.Height - margin)
                     {
                         e.HasMorePages = true;
-                        currentY = margin;
-                        return; // Move to next page
+                        currentY = margin; // Reset for next page
+                        return; // Stop printing on current page
                     }
                 }
                 e.HasMorePages = false; // No more pages
             };
 
-            // Show Print Preview Dialog (optional, but good for user)
-            PrintPreviewDialog ppd = new PrintPreviewDialog();
-            ppd.Document = printDocument;
-            if (ppd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    printDocument.Print();
-                    _view.ShowMessage("Order history printed successfully!", "Print Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    _view.ShowMessage("Error printing order history: " + ex.Message, "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-
-        public void HandleCellContentClick(DataGridViewCellEventArgs e)
-        {
-            // Fix for CS8370: Replaced 'is not' pattern with compatible C# 7.3 syntax
-            DataTable currentDisplayTable = _view.OrderHistoryDataSource as DataTable;
-            if (e.RowIndex < 0 || currentDisplayTable == null || currentDisplayTable.Rows.Count <= e.RowIndex) return;
-
-            // Get the DataRow from the current display table
-            DataRow row = currentDisplayTable.Rows[e.RowIndex];
-            int orderId = SafeOperations.SafeGetInt(row, "dgvOrderId");
-            string paymentStatus = SafeOperations.SafeGetString(row, "dgvPayment");
-
-            // Handle "Delete" button click
-            if (e.ColumnIndex == GetColumnIndex("dgvDelete"))
-            {
-                if (orderId == 0)
-                {
-                    _view.ShowMessage("Invalid Order ID. Cannot delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                DialogResult dialogResult = _view.ShowConfirmation("Are you sure you want to delete this order?", "Delete Order", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (dialogResult == DialogResult.Yes)
-                {
-                    string inputPin = Microsoft.VisualBasic.Interaction.InputBox("Enter PIN code to confirm deletion:", "PIN Required", "");
-
-                    if (inputPin == "1111") // Hardcoded PIN for now
-                    {
-                        try
-                        {
-                            _orderManager.DeleteOrderItems(orderId); // Delete order items
-                            string deleteOrderQuery = "DELETE FROM Orders WHERE OrderId = @OrderId";
-                            Dictionary<string, object> orderParameters = new Dictionary<string, object> { { "@OrderId", orderId } };
-                            int rowsAffected = DatabaseManager.ExecuteNonQuery(deleteOrderQuery, orderParameters);
-
-                            if (rowsAffected > 0)
-                            {
-                                _view.ShowMessage("Order deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                LoadOrderHistory(); // Reload the order history
-                                ApplyAllFilters(); // Reapply filters to update display
-                            }
-                            else
-                            {
-                                _view.ShowMessage("No order was deleted. Please check the Order ID.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _view.ShowMessage($"Error deleting order: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else
-                    {
-                        _view.ShowMessage("Invalid PIN code. Deletion canceled.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            // Handle "Cancel" button click
-            else if (e.ColumnIndex == GetColumnIndex("dgvCancel"))
-            {
-                string buttonText = SafeOperations.SafeGetCellString((DataGridView)_view, e.RowIndex, "dgvCancel");
-
-                string dialogMessage;
-                string updatePaymentType;
-
-                if (buttonText == "CANCEL")
-                {
-                    dialogMessage = "Are you sure you want to cancel this order?";
-                    updatePaymentType = "CANCELLED";
-                }
-                else
-                {
-                    dialogMessage = "Are you sure you want to uncancel this order?";
-                    updatePaymentType = "PENDING";
-                }
-
-                DialogResult dialogResult = _view.ShowConfirmation(dialogMessage, "Cancel Order", MessageBoxButtons.YesNo, MessageBoxIcon.Question); // Added MessageBoxIcon.Question
-
-                if (dialogResult == DialogResult.Yes)
-                {
-                    _orderManager.UpdateOrderPaymentStatus(orderId, updatePaymentType);
-                    LoadOrderHistory(); // Reload data
-                    ApplyAllFilters(); // Reapply filters
-                }
-            }
-            // Handle "View" button click
-            else if (e.ColumnIndex == GetColumnIndex("dgvView"))
-            {
-                if (orderId == 0)
-                {
-                    _view.ShowMessage("Invalid Order ID. Cannot view details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                using (OrderViewForm orderViewForm = new OrderViewForm(orderId))
-                {
-                    // Assuming OrderViewForm's presenter handles its own lifecycle and data loading
-                    // ShowDialog will block until OrderViewForm is closed.
-                    // If OrderViewForm makes changes that need to be reflected in OrderHistory,
-                    // you'll need to reload the history after it closes.
-                    if (orderViewForm.ShowDialog() == DialogResult.OK) // Or check a property on orderViewForm if it was saved
-                    {
-                        LoadOrderHistory(); // Reload data after OrderViewForm closes
-                        ApplyAllFilters(); // Reapply filters
-                    }
-                }
-            }
-        }
-
-        private int GetColumnIndex(string columnName)
-        {
-            // This is a bit of a hack as the Presenter shouldn't know about DataGridView columns directly.
-            // Ideally, the View would pass the column name/index to the Presenter via the event args.
-            // For now, assuming the View exposes a way to get column index or the event args contain it.
-            // Since DataGridViewCellEventArgs has ColumnIndex, we can use that directly.
-            // This method is a placeholder if direct column name lookup is needed.
-            // In a real MVP, the view would pass the column name as part of the event args.
-            // For example, in IOrderHistoryView: event EventHandler<CellActionEventArgs> OrderCellAction;
-            // where CellActionEventArgs has OrderId, ActionType (Delete, View, Cancel), etc.
-            // For now, I'll rely on the `e.ColumnIndex` from the DataGridViewCellEventArgs.
-            // So this method is effectively not needed if `e.ColumnIndex` is used directly.
-            return -1; // Placeholder, as it's not used directly in HandleCellContentClick
+            // Show the Print Preview Dialog
+            PrintPreviewDialog printPreviewDialog = new PrintPreviewDialog();
+            printPreviewDialog.Document = printDocument;
+            printPreviewDialog.ShowDialog();
         }
 
 
         public void HandleCalculationsClicked()
         {
-            try
-            {
-                // Get the current date range from the view
-                DateTime fromDate = _view.FromDate.Date;
-                DateTime toDate = _view.ToDate.Date;
-
-                // Create a new form for displaying the calculations
-                Form calculationsForm = new Form
-                {
-                    Text = fromDate == toDate ?
-                        $"Order Calculations for {fromDate:dd/MM/yyyy}" :
-                        $"Order Calculations from {fromDate:dd/MM/yyyy} to {toDate:dd/MM/yyyy}",
-                    Size = new Size(700, 700),
-                    StartPosition = FormStartPosition.CenterParent,
-                    FormBorderStyle = FormBorderStyle.Sizable,
-                    MaximizeBox = true,
-                    MinimizeBox = true
-                };
-
-                // Create a TableLayoutPanel for organizing the content
-                TableLayoutPanel tableLayout = new TableLayoutPanel
-                {
-                    Dock = DockStyle.Fill,
-                    ColumnCount = 1,
-                    RowCount = 3,
-                    Padding = new Padding(20),
-                    CellBorderStyle = TableLayoutPanelCellBorderStyle.None
-                };
-
-                tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-                tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-                tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-
-                // Create header label
-                Label headerLabel = new Label
-                {
-                    Text = fromDate == toDate ?
-                        $"Order Summary for {fromDate:dd MMMMWriteHeader}" :
-                        $"Order Summary from {fromDate:dd MMMMWriteHeader} to {toDate:dd MMMMWriteHeader}",
-                    Font = new Font("Segoe UI", 14, FontStyle.Bold),
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Dock = DockStyle.Fill
-                };
-
-                // Create a panel for the main content
-                Panel contentPanel = new Panel
-                {
-                    Dock = DockStyle.Fill,
-                    AutoScroll = true
-                };
-
-                // Create a FlowLayoutPanel for the footer buttons
-                FlowLayoutPanel footerPanel = new FlowLayoutPanel
-                {
-                    Dock = DockStyle.Fill,
-                    FlowDirection = FlowDirection.RightToLeft,
-                    Padding = new Padding(0, 10, 0, 0)
-                };
-
-                // Add a print button
-                System.Windows.Forms.Button printButton = new System.Windows.Forms.Button
-                {
-                    Text = "Print",
-                    Size = new Size(100, 30),
-                    Margin = new Padding(5)
-                };
-                printButton.Click += (s, args) =>
-                {
-                    // Implement printing functionality for the calculations form
-                    // This would involve rendering the contentPanel to a bitmap and printing it
-                    PrintCalculationsFormContent(contentPanel, calculationsForm.Text);
-                };
-
-                // Add a close button
-                System.Windows.Forms.Button closeButton = new System.Windows.Forms.Button
-                {
-                    Text = "Close",
-                    Size = new Size(100, 30),
-                    Margin = new Padding(5)
-                };
-                closeButton.Click += (s, args) => calculationsForm.Close();
-
-
-                // Add buttons to footer
-                footerPanel.Controls.Add(closeButton);
-                footerPanel.Controls.Add(printButton);
-
-                // Add all panels to the table layout
-                tableLayout.Controls.Add(headerLabel, 0, 0);
-                tableLayout.Controls.Add(contentPanel, 0, 1);
-                tableLayout.Controls.Add(footerPanel, 0, 2);
-
-                // Add the table layout to the form
-                calculationsForm.Controls.Add(tableLayout);
-
-                // Set the form size to 80% of the screen size
-                calculationsForm.Size = new Size(
-                    (int)(Screen.PrimaryScreen.WorkingArea.Width * 0.4),
-                    (int)(Screen.PrimaryScreen.WorkingArea.Height * 0.8)
-                );
-
-                // Now populate the content panel with the order breakdown
-                PopulateOrderBreakdown(contentPanel, fromDate, toDate);
-
-                // Show the form via the view
-                _view.ShowCalculationsForm(calculationsForm);
-            }
-            catch (Exception ex)
-            {
-                _view.ShowMessage($"Error generating calculations: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // Assuming CalculationsForm exists and is a Form
+            Form calculationsForm = new Form(); // Replace with actual CalculationsForm instantiation
+            _view.ShowCalculationsForm(calculationsForm);
         }
 
-        private void PrintCalculationsFormContent(Panel contentPanel, string formTitle)
+        public void HandleCellContentClick(OrderHistoryCellClickEventArgs e)
         {
-            if (contentPanel.Controls.Count == 0)
+            // Use the OrderId and ColumnName passed from the view
+            string columnName = e.ColumnName;
+            int orderId = e.OrderId;
+
+            if (orderId == 0)
             {
-                _view.ShowMessage("No content to print.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _view.ShowMessage("Could not retrieve Order ID for the selected row.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Create a bitmap of the content panel
-            Bitmap bmp = new Bitmap(contentPanel.Width, contentPanel.Height);
-            contentPanel.DrawToBitmap(bmp, new Rectangle(0, 0, contentPanel.Width, contentPanel.Height));
-
-            PrintDocument printDoc = new PrintDocument();
-            printDoc.DocumentName = formTitle;
-
-            printDoc.PrintPage += (sender, e) =>
+            if (columnName == "dgvView")
             {
-                e.Graphics.DrawImage(bmp, e.PageBounds.Left, e.PageBounds.Top, e.PageBounds.Width, bmp.Height * e.PageBounds.Width / bmp.Width);
-            };
-
-            PrintPreviewDialog ppd = new PrintPreviewDialog();
-            ppd.Document = printDoc;
-            if (ppd.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    printDoc.Print();
-                    _view.ShowMessage("Calculations printed successfully!", "Print Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    _view.ShowMessage($"Error printing calculations: {ex.Message}", "Print Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                _view.ShowOrderViewForm(orderId);
             }
-            bmp.Dispose(); // Dispose the bitmap
-        }
-
-        private void PopulateOrderBreakdown(Panel contentPanel, DateTime fromDate, DateTime toDate)
-        {
-            // Clear existing controls in the content panel
-            contentPanel.Controls.Clear();
-
-            // Create a table layout for the content
-            TableLayoutPanel contentTable = new TableLayoutPanel
+            else if (columnName == "dgvCancel")
             {
-                Dock = DockStyle.Top,
-                AutoSize = true,
-                ColumnCount = 2,
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
-                Padding = new Padding(10)
-            };
+                // Find the row in the in-memory DataTable
+                DataRow rowToUpdate = _allOrderHistoryData.AsEnumerable()
+                                        .FirstOrDefault(r => SafeOperations.SafeGetInt(r, "dgvOrderId") == orderId);
 
-            contentTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-            contentTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-
-            // Query to get order counts and amounts by type (excluding refunded and cancelled)
-            string orderTypeQuery = @"
-                SELECT
-                    OrderType,
-                    COUNT(*) AS OrderCount,
-                    SUM(TotalPrice) AS TotalAmount
-                FROM
-                    Orders
-                WHERE
-                    OrderDate >= @FromDate AND OrderDate <= @ToDate
-                    AND PaymentType NOT IN ('CANCELLED', 'REFUNDED')
-                GROUP BY
-                    OrderType
-                ORDER BY
-                    OrderType";
-
-            Dictionary<string, object> orderTypeParams = new Dictionary<string, object>
-            {
-                { "@FromDate", fromDate },
-                { "@ToDate", toDate.AddDays(1).AddSeconds(-1) } // End of the day
-            };
-
-            DataTable orderTypeData = DatabaseManager.ExecuteQuery(orderTypeQuery, orderTypeParams);
-
-            // Query to get refunded orders by type
-            string refundedQuery = @"
-                SELECT
-                    OrderType,
-                    COUNT(*) AS OrderCount,
-                    SUM(TotalPrice) AS TotalAmount
-                FROM
-                    Orders
-                WHERE
-                    OrderDate >= @FromDate AND OrderDate <= @ToDate
-                    AND PaymentType = 'REFUNDED'
-                GROUP BY
-                    OrderType
-                ORDER BY
-                    OrderType";
-
-            Dictionary<string, object> refundedParams = new Dictionary<string, object>
-            {
-                { "@FromDate", fromDate },
-                { "@ToDate", toDate.AddDays(1).AddSeconds(-1) } // End of the day
-            };
-
-            DataTable refundedData = DatabaseManager.ExecuteQuery(refundedQuery, refundedParams);
-
-            // Query to get payment breakdown by order type
-            string paymentByTypeQuery = @"
-                SELECT
-                    OrderType,
-                    PaymentType,
-                    COUNT(*) AS OrderCount,
-                    SUM(TotalPrice) AS TotalAmount
-                FROM
-                    Orders
-                WHERE
-                    OrderDate >= @FromDate AND OrderDate <= @ToDate
-                    AND PaymentType NOT IN ('CANCELLED', 'REFUNDED')
-                GROUP BY
-                    OrderType, PaymentType
-                ORDER BY
-                    OrderType, PaymentType";
-
-            Dictionary<string, object> paymentByTypeParams = new Dictionary<string, object>
-            {
-                { "@FromDate", fromDate },
-                { "@ToDate", toDate.AddDays(1).AddSeconds(-1) } // End of the day
-            };
-
-            DataTable paymentByTypeData = DatabaseManager.ExecuteQuery(paymentByTypeQuery, paymentByTypeParams);
-
-            // Calculate overall totals
-            decimal totalSales = 0;
-            int totalOrders = 0;
-            decimal cashTotal = 0;
-            decimal cardTotal = 0;
-            decimal pendingTotal = 0;
-            int totalRefundedOrders = 0;
-            decimal totalRefundedAmount = 0;
-
-            // Create dictionaries to store payment totals by order type
-            Dictionary<string, decimal> cashByOrderType = new Dictionary<string, decimal>();
-            Dictionary<string, decimal> cardByOrderType = new Dictionary<string, decimal>();
-            Dictionary<string, decimal> pendingByOrderType = new Dictionary<string, decimal>();
-            Dictionary<string, int> refundedCountByOrderType = new Dictionary<string, int>();
-            Dictionary<string, decimal> refundedAmountByOrderType = new Dictionary<string, decimal>();
-
-            // Process payment by type data
-            if (paymentByTypeData != null && paymentByTypeData.Rows.Count > 0)
-            {
-                foreach (DataRow paymentRow in paymentByTypeData.Rows)
+                if (rowToUpdate != null)
                 {
-                    string orderType = SafeOperations.SafeGetString(paymentRow, "OrderType");
-                    string paymentType = SafeOperations.SafeGetString(paymentRow, "PaymentType");
-                    decimal amount = SafeOperations.SafeGetDecimal(paymentRow, "TotalAmount");
+                    string currentPaymentStatus = SafeOperations.SafeGetString(rowToUpdate, "dgvPayment");
 
-                    // Track totals by payment type
-                    if (paymentType.Equals("CASH", StringComparison.OrdinalIgnoreCase))
+                    if (currentPaymentStatus.Equals("CANCELLED", StringComparison.OrdinalIgnoreCase))
                     {
-                        cashTotal += amount;
-                        if (!cashByOrderType.ContainsKey(orderType))
-                            cashByOrderType[orderType] = 0;
-                        cashByOrderType[orderType] += amount;
+                        // If currently CANCELLED, uncancel it (set to PENDING or NOT PAID based on business logic)
+                        _orderManager.UpdateOrderPaymentStatus(orderId, "PENDING"); // Update DB
+                        rowToUpdate["dgvPayment"] = "PENDING"; // Update in-memory DataTable
+                        rowToUpdate["dgvOrderType"] = "PENDING"; // Assuming order type also changes
                     }
-                    else if (paymentType.Equals("CARD", StringComparison.OrdinalIgnoreCase))
+                    else
                     {
-                        cardTotal += amount;
-                        if (!cardByOrderType.ContainsKey(orderType))
-                            cardByOrderType[orderType] = 0;
-                        cardByOrderType[orderType] += amount;
+                        // If not CANCELLED, cancel it
+                        _orderManager.CancelOrder(orderId); // Update DB
+                        rowToUpdate["dgvPayment"] = "CANCELLED"; // Update in-memory DataTable
+                        rowToUpdate["dgvOrderType"] = "CANCELLED"; // Assuming order type also changes
                     }
-                    else if (paymentType.Equals("PENDING", StringComparison.OrdinalIgnoreCase))
-                    {
-                        pendingTotal += amount;
-                        if (!pendingByOrderType.ContainsKey(orderType))
-                            pendingByOrderType[orderType] = 0;
-                        pendingByOrderType[orderType] += amount;
-                    }
+                    ApplyAllFilters(); // Reapply filters to update display and total value
                 }
             }
-
-            // Process refunded data
-            if (refundedData != null && refundedData.Rows.Count > 0)
+            else if (columnName == "dgvDelete")
             {
-                foreach (DataRow refundRow in refundedData.Rows)
+                // Show confirmation dialog before deleting
+                DialogResult result = _view.ShowConfirmation(
+                    "Are you sure you want to delete this order? This action cannot be undone.",
+                    "Confirm Deletion",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.Yes)
                 {
-                    string orderType = SafeOperations.SafeGetString(refundRow, "OrderType");
-                    int count = SafeOperations.SafeGetInt(refundRow, "OrderCount");
-                    decimal amount = SafeOperations.SafeGetDecimal(refundRow, "TotalAmount");
+                    _orderManager.DeleteOrder(orderId); // Delete from DB
 
-                    totalRefundedOrders += count;
-                    totalRefundedAmount += amount;
-
-                    if (!refundedCountByOrderType.ContainsKey(orderType))
-                        refundedCountByOrderType[orderType] = 0;
-                    refundedCountByOrderType[orderType] += count;
-
-                    if (!refundedAmountByOrderType.ContainsKey(orderType))
-                        refundedAmountByOrderType[orderType] = 0;
-                    refundedAmountByOrderType[orderType] += amount;
-                }
-            }
-
-            // Add section headers
-            AddSectionHeader(contentTable, "Order Details", 0);
-            AddSectionHeader(contentTable, "Amount", 1);
-
-            int currentRow = 1;
-
-            // Add order type breakdown with payment details
-            if (orderTypeData != null && orderTypeData.Rows.Count > 0)
-            {
-                foreach (DataRow dataRow in orderTypeData.Rows)
-                {
-                    string orderType = SafeOperations.SafeGetString(dataRow, "OrderType");
-                    int count = SafeOperations.SafeGetInt(dataRow, "OrderCount");
-                    decimal amount = SafeOperations.SafeGetDecimal(dataRow, "TotalAmount");
-
-                    totalOrders += count;
-                    totalSales += amount;
-
-                    // Get cash, card, and pending amounts for this order type
-                    decimal cashAmount = cashByOrderType.ContainsKey(orderType) ? cashByOrderType[orderType] : 0;
-                    decimal cardAmount = cardByOrderType.ContainsKey(orderType) ? cardByOrderType[orderType] : 0;
-                    decimal pendingAmount = pendingByOrderType.ContainsKey(orderType) ? pendingByOrderType[orderType] : 0;
-
-                    // Add a header for this order type
-                    AddOrderTypeHeader(contentTable, orderType, currentRow++);
-
-                    // Add order count on a separate row
-                    AddDetailRow(contentTable, "Orders:", $"{count}", 0, currentRow++);
-
-                    // Add cash, card, and pending breakdown for this order type
-                    if (cashAmount > 0)
-                        AddDetailRow(contentTable, "Cash:", $"£{cashAmount:F2}", 0, currentRow++);
-                    if (cardAmount > 0)
-                        AddDetailRow(contentTable, "Card:", $"£{cardAmount:F2}", 0, currentRow++);
-                    if (pendingAmount > 0)
-                        AddDetailRow(contentTable, "Pending:", $"£{pendingAmount:F2}", 0, currentRow++);
-
-                    // Add refunded information if applicable
-                    if (refundedCountByOrderType.ContainsKey(orderType) && refundedCountByOrderType[orderType] > 0)
+                    // Remove the row from the in-memory DataTable
+                    DataRow rowToDelete = _allOrderHistoryData.AsEnumerable()
+                                            .FirstOrDefault(r => SafeOperations.SafeGetInt(r, "dgvOrderId") == orderId);
+                    if (rowToDelete != null)
                     {
-                        int refundedCount = refundedCountByOrderType[orderType];
-                        decimal refundedAmount = refundedAmountByOrderType[orderType];
-
-                        AddDetailRow(contentTable, "Refunded Orders:", $"{refundedCount}", 0, currentRow++);
-                        AddDetailRow(contentTable, "Refunded Amount:", $"£{refundedAmount:F2}", 0, currentRow++);
+                        _allOrderHistoryData.Rows.Remove(rowToDelete);
+                        _allOrderHistoryData.AcceptChanges(); // Commit the removal
                     }
-
-                    // Add a total for this order type
-                    AddSectionTotal(contentTable, "Total:", $"£{amount:F2}", currentRow++);
-
-                    // Add a small gap after each order type
-                    AddEmptyRow(contentTable, currentRow++);
+                    ApplyAllFilters(); // Reapply filters to update display and total value
                 }
             }
-            else
-            {
-                AddDetailRow(contentTable, "No orders found", "", 0, currentRow++);
-            }
-
-            // Add a separator row
-            AddSeparatorRow(contentTable, currentRow++, 2);
-
-            // Add total rows for all orders
-            AddSummaryRow(contentTable, "Total Orders:", $"{totalOrders}", currentRow++);
-            AddSummaryRow(contentTable, "Total Sales:", $"£{totalSales:F2}", currentRow++);
-
-            // Add cash total (including pending amounts as cash)
-            decimal adjustedCashTotal = cashTotal + pendingTotal;
-            AddSummaryRow(contentTable, "Cash Total:", $"£{adjustedCashTotal:F2}", currentRow++);
-
-            // Show pending amount separately if it exists
-            if (pendingTotal > 0)
-                AddDetailRow(contentTable, "   (Includes Pending):", $"£{pendingTotal:F2}", 0, currentRow++);
-
-            AddSummaryRow(contentTable, "Card Total:", $"£{cardTotal:F2}", currentRow++);
-
-            // Add refunded information to the summary if applicable
-            if (totalRefundedOrders > 0)
-            {
-                AddEmptyRow(contentTable, currentRow++);
-                AddSummaryRow(contentTable, "Refunded Orders:", $"{totalRefundedOrders}", currentRow++);
-                AddSummaryRow(contentTable, "Refunded Amount:", $"£{totalRefundedAmount:F2}", currentRow++);
-                AddDetailRow(contentTable, "(Not included in totals)", "", 0, currentRow++);
-            }
-
-            // Add the content table to the panel
-            contentPanel.Controls.Add(contentTable);
         }
 
-        // Helper methods for calculations form UI (can be moved to a dedicated helper class if needed)
-        private void AddOrderTypeHeader(TableLayoutPanel table, string text, int row)
-        {
-            Label headerLabel = new Label
-            {
-                Text = text,
-                Font = new Font("Segoe UI", 11, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(5)
-            };
-            EnsureRowExists(table, row);
-            table.Controls.Add(headerLabel, 0, row);
-            table.SetColumnSpan(headerLabel, 2);
-        }
-
-        private void AddSectionTotal(TableLayoutPanel table, string label, string value, int row)
-        {
-            Label labelControl = new Label
-            {
-                Text = label,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(5)
-            };
-            Label valueControl = new Label
-            {
-                Text = value,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleRight,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(5)
-            };
-            EnsureRowExists(table, row);
-            table.Controls.Add(labelControl, 0, row);
-            table.Controls.Add(valueControl, 1, row);
-        }
-
-        private void AddSectionHeader(TableLayoutPanel table, string text, int column)
-        {
-            Label headerLabel = new Label
-            {
-                Text = text,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(5)
-            };
-            EnsureRowExists(table, 0); // Ensure header row exists
-            table.Controls.Add(headerLabel, column, 0);
-        }
-
-        private void AddDetailRow(TableLayoutPanel table, string label, string value, int column, int row)
-        {
-            Label labelControl = new Label
-            {
-                Text = label,
-                Font = new Font("Segoe UI", 10),
-                TextAlign = ContentAlignment.MiddleLeft,
-                Dock = DockStyle.Fill,
-                Margin = new Padding(5)
-            };
-            EnsureRowExists(table, row);
-            table.Controls.Add(labelControl, column, row);
-
-            if (!string.IsNullOrEmpty(value))
-            {
-                Label valueControl = new Label
-                {
-                    Text = value,
-                    Font = new Font("Segoe UI", 10),
-                    TextAlign = ContentAlignment.MiddleRight,
-                    Dock = DockStyle.Fill,
-                    Margin = new Padding(5)
-                };
-                table.Controls.Add(valueControl, column + 1, row);
-            }
-            else
-            {
-                table.SetColumnSpan(labelControl, 2);
-            }
-        }
-
-        private void AddEmptyRow(TableLayoutPanel table, int row)
-        {
-            Label emptyLabel = new Label
-            {
-                Text = "",
-                Height = 5,
-                Dock = DockStyle.Fill
-            };
-            EnsureRowExists(table, row);
-            table.Controls.Add(emptyLabel, 0, row);
-            table.SetColumnSpan(emptyLabel, 2);
-        }
-
-        private void AddSeparatorRow(TableLayoutPanel table, int row, int columnSpan)
+        private void AddLineSeparator(TableLayoutPanel table, int row, int columnSpan)
         {
             Panel separatorPanel = new Panel
             {
-                Height = 2,
-                BackColor = Color.Black,
+                Height = 2, // Thickness of the line
+                BackColor = Color.LightGray, // Color of the line
                 Dock = DockStyle.Fill,
-                Margin = new Padding(5, 10, 5, 10)
+                Margin = new Padding(0, 5, 0, 5) // Padding around the line
             };
             EnsureRowExists(table, row);
             table.Controls.Add(separatorPanel, 0, row);

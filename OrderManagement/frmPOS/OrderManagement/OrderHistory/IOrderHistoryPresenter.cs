@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using OrderManagement.View; // Needed for OrderHistoryCellClickEventArgs
 
 namespace OrderManagement.Presenter
 {
@@ -16,7 +17,8 @@ namespace OrderManagement.Presenter
         void HandleDownloadClicked();
         void HandlePrintClicked();
         void HandleResetFiltersClicked();
-        void HandleCellContentClick(DataGridViewCellEventArgs e);
+        // Modified signature to use the custom EventArgs
+        void HandleCellContentClick(OrderHistoryCellClickEventArgs e);
         void HandleCalculationsClicked();
         void HandleFormClosing(FormClosingEventArgs e);
     }

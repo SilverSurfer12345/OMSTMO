@@ -338,6 +338,29 @@ namespace OrderManagement.Model
             DatabaseManager.ExecuteNonQuery(query, parameters);
         }
 
+        // Method to cancel an order
+        public void CancelOrder(int orderId)
+        {
+            // Update the OrderType and PaymentType to "CANCELLED"
+            string query = "UPDATE Orders SET OrderType = 'CANCELLED', PaymentType = 'CANCELLED' WHERE OrderId = @OrderId";
+            var parameters = new Dictionary<string, object> { { "@OrderId", orderId } };
+            DatabaseManager.ExecuteNonQuery(query, parameters);
+        }
+
+        // Method to delete an order (without confirmation/PIN)
+        public void DeleteOrder(int orderId)
+        {
+            // Delete associated OrderItems first due to foreign key constraints
+            string deleteOrderItemsQuery = "DELETE FROM OrderItems WHERE OrderId = @OrderId";
+            var orderItemsParameters = new Dictionary<string, object> { { "@OrderId", orderId } };
+            DatabaseManager.ExecuteNonQuery(deleteOrderItemsQuery, orderItemsParameters);
+
+            // Then delete the Order itself
+            string deleteOrderQuery = "DELETE FROM Orders WHERE OrderId = @OrderId";
+            var orderParameters = new Dictionary<string, object> { { "@OrderId", orderId } };
+            DatabaseManager.ExecuteNonQuery(deleteOrderQuery, orderParameters);
+        }
+
         // Added methods for PresetCharges
         public List<PresetChargeDto> GetPresetCharges()
         {

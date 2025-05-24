@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OrderManagement.Model;
+using OrderManagement.Presenter; // Import the presenter namespace
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,7 +11,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using OrderManagement.Presenter; // Import the presenter namespace
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OrderManagement.View
@@ -36,7 +37,7 @@ namespace OrderManagement.View
             btnPrint.Click += (s, e) => _presenter.HandlePrintClicked();
             btnReset.Click += (s, e) => _presenter.HandleResetFiltersClicked();
             btnCalculations.Click += (s, e) => _presenter.HandleCalculationsClicked();
-            dgvOrderHistoryView.CellContentClick += (s, e) => _presenter.HandleCellContentClick(e);
+            dgvOrderHistoryView.CellContentClick += (s, e) => _presenter.HandleCellContentClick(new OrderHistoryCellClickEventArgs(e.RowIndex, e.ColumnIndex, dgvOrderHistoryView.Columns[e.ColumnIndex].Name, SafeOperations.SafeGetCellInt(dgvOrderHistoryView, e.RowIndex, "dgvOrderId")));
             this.FormClosing += (s, e) => _presenter.HandleFormClosing(e);
 
 
@@ -158,6 +159,18 @@ namespace OrderManagement.View
             calculationsForm.ShowDialog(this); // Show as a dialog parented by this form
         }
 
+        // Implementation of IOrderHistoryView.ShowOrderViewForm
+        public void ShowOrderViewForm(int orderId)
+        {
+            // Instantiate and show the OrderViewForm for the given orderId
+            // Assuming OrderViewForm has a constructor that takes an orderId
+            // You may need to adjust the namespace or class name based on your project structure.
+            // Example:
+            // using OrderManagement.View;
+            OrderViewForm orderView = new OrderViewForm(orderId); // Corrected class name
+            orderView.ShowDialog();
+        }
+
         // Events (View raises these, Presenter subscribes)
         public event EventHandler ViewLoaded;
         public event EventHandler OrderTypeFilterChanged;
@@ -169,7 +182,7 @@ namespace OrderManagement.View
         public event EventHandler DownloadClicked;
         public event EventHandler PrintClicked;
         public event EventHandler ResetFiltersClicked;
-        public event EventHandler<DataGridViewCellEventArgs> CellContentClicked;
+        public event EventHandler<OrderHistoryCellClickEventArgs> CellContentClicked;
         public event EventHandler CalculationsClicked;
         public event FormClosingEventHandler FormClosingConfirmed;
 
